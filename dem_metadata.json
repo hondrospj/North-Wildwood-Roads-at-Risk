@@ -1,0 +1,44 @@
+{
+  "name": "Roads at Risk - North Wildwood DEM",
+  "source": "USGS 3DEP Bare Earth DEM Dynamic ImageServer",
+  "sourceUrl": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+  "sourceDescription": "USGS 3D Elevation Program (3DEP) Bare Earth DEM Dynamic service; service metadata says data available as of 2026-07-20; checked 2026-08-07.",
+  "downloadedAt": "2026-08-07",
+  "processing": "Exported from USGS 3DEP at city extent, masked to the North Wildwood boundary, resampled to 1.524 m / 5 ft pixels, compressed as Cloud Optimized GeoTIFF.",
+  "horizontalCrs": "EPSG:3857",
+  "verticalUnits": "meters",
+  "displayElevationUnits": "feet",
+  "pixelSizeMeters": 1.524,
+  "pixelSizeFeet": 4.99999999998,
+  "width": 2805,
+  "height": 3644,
+  "nodata": -999999,
+  "minMeters": -1.228,
+  "maxMeters": 6.538,
+  "meanMeters": 1.04,
+  "stdDevMeters": 1.305,
+  "minFeet": -4.02887139106,
+  "maxFeet": 21.450131233510003,
+  "webMercatorBounds": [
+    -8328816.588413,
+    4719889.491126,
+    -8324541.768413,
+    4725442.947126
+  ],
+  "leafletBounds": [
+    [
+      38.9875662,
+      -74.8190324
+    ],
+    [
+      39.0263239,
+      -74.7806391
+    ]
+  ],
+  "files": {
+    "demCog": "north_wildwood_dem_5ft_cog.tif",
+    "hillshadeCog": "north_wildwood_hillshade_cog.tif",
+    "hillshadePng": "north_wildwood_hillshade.png",
+    "boundaryGeojson": "north_wildwood_boundary.geojson"
+  }
+}

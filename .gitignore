@@ -1,0 +1,8 @@
+*_boundary_3857.geojson
+*_dem_5ft_masked.tif
+*_dem_5ft_cog.tif.aux.xml
+*_hillshade_tmp.tif
+*_hillshade.png.aux.xml
+*_source.tif
+*_source.vrt
+*_tile_*.tif
