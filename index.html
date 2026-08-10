@@ -1892,10 +1892,430 @@
       box-shadow:0 0 0 4px rgba(216,75,103,.28), 0 8px 22px rgba(11,18,32,.55);
     }
 
+    .drawPrompt{
+      position:fixed;
+      top:max(12px, env(safe-area-inset-top));
+      left:50%;
+      z-index:850;
+      width:min(430px, calc(100vw - 112px));
+      min-height:48px;
+      transform:translateX(-50%);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 9px 8px 14px;
+      border:1px solid rgba(191,219,254,.38);
+      border-radius:12px;
+      color:var(--text);
+      background:rgba(11,18,32,.96);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+      font-size:13px;
+      font-weight:900;
+      line-height:1.25;
+    }
+
+    .drawPrompt[hidden]{display:none}
+
+    .drawPrompt button{
+      flex:0 0 auto;
+      min-height:36px;
+      padding:7px 10px;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    .keyToggle:focus-within{
+      outline:3px solid rgba(191,219,254,.92);
+      outline-offset:2px;
+    }
+
+    @media (max-width: 980px){
+      html,
+      body{
+        width:100%;
+        max-width:100%;
+        min-height:100%;
+        min-height:100dvh;
+        overflow-x:hidden;
+        -webkit-text-size-adjust:100%;
+      }
+
+      html.mobilePaneOpen,
+      body.mobilePaneOpen{
+        overflow:hidden !important;
+        overscroll-behavior:none;
+      }
+
+      #map{
+        height:46vh;
+        height:46svh;
+        min-height:300px;
+        max-height:460px;
+      }
+
+      .shell{
+        gap:12px;
+        min-height:0;
+        padding:
+          10px
+          max(10px, env(safe-area-inset-right))
+          max(14px, env(safe-area-inset-bottom))
+          max(10px, env(safe-area-inset-left));
+      }
+
+      .titleBar{
+        min-height:72px;
+        padding:11px 14px;
+      }
+
+      h1{
+        font-size:clamp(24px, 7vw, 29px);
+        line-height:1.05;
+      }
+
+      .badge{
+        min-height:30px;
+        padding:6px 10px;
+        font-size:11px;
+      }
+
+      .mapControl,
+      .toolPane{
+        padding:12px;
+      }
+
+      .rightStack{
+        gap:12px;
+        grid-template-rows:auto auto auto;
+      }
+
+      .toolPane,
+      .crossSectionPane,
+      .floodHistoryPane,
+      .exportPane{
+        min-height:0;
+        overflow:visible;
+      }
+
+      .toolTitleRow{
+        align-items:flex-start;
+        min-height:44px;
+      }
+
+      .toolTitle{
+        min-height:44px;
+        white-space:normal;
+      }
+
+      .crossSectionPane .toolTitleRow{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:8px;
+      }
+
+      .crossSectionPane .toolTitle{
+        width:100%;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 132px;
+        gap:8px;
+        align-items:center;
+      }
+
+      .crossSectionPane .paneActions{
+        width:100%;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 44px;
+        gap:8px;
+      }
+
+      .crossSectionPane .drawAction{
+        width:100%;
+      }
+
+      .mapModes button,
+      .titleDatumToggle button,
+      .drawAction,
+      .expandBtn,
+      .thresholdCompact button,
+      .thresholdInputRow button,
+      .scenarioRow button,
+      .lineForm button,
+      .lineUtility button,
+      .savedLine button,
+      .exportActions button,
+      .exportFormatRow select{
+        min-height:44px;
+      }
+
+      .mapModes button,
+      .titleDatumToggle button,
+      .scenarioRow button{
+        font-size:12px;
+      }
+
+      .expandBtn{
+        width:44px;
+        min-width:44px;
+        padding:0;
+      }
+
+      .drawAction{
+        padding:9px 11px;
+        font-size:12px;
+      }
+
+      .titleDatumToggle{
+        width:132px;
+      }
+
+      .compactStats .stat{
+        min-height:64px;
+        padding:10px;
+      }
+
+      .compactStats .stat .v{
+        font-size:17px;
+      }
+
+      .thresholdCompact{
+        margin:10px 0;
+        gap:8px;
+      }
+
+      .thresholdCompact button{
+        min-height:48px;
+        font-size:12px;
+      }
+
+      .thresholdCompact button small{
+        font-size:10px;
+      }
+
+      .thresholdInputRow{
+        grid-template-columns:minmax(0,1fr) 76px;
+        gap:8px;
+      }
+
+      input[type="number"],
+      .lineForm input,
+      .exportFormatRow select{
+        min-height:44px;
+        padding:9px 11px;
+        font-size:16px;
+      }
+
+      .chartKey{
+        gap:7px;
+        margin-bottom:8px;
+      }
+
+      .keyToggle{
+        min-height:44px;
+        padding:8px 10px;
+        font-size:12px;
+      }
+
+      .keyToggle input{
+        width:18px;
+        height:18px;
+        min-width:18px;
+      }
+
+      .chartWrap{
+        height:250px;
+        min-height:250px;
+        flex:none;
+        touch-action:pan-y;
+      }
+
+      .tinyChartWrap{
+        height:190px;
+        min-height:190px;
+        touch-action:pan-y;
+      }
+
+      .lineForm{
+        grid-template-columns:minmax(0,1fr) 76px;
+        gap:8px;
+      }
+
+      .lineUtility,
+      .exportActions,
+      .exportFormatRow{
+        gap:8px;
+      }
+
+      .savedLine button{
+        min-height:44px;
+        padding:8px 10px;
+        font-size:12px;
+      }
+
+      .exportStatus,
+      .modelNote{
+        font-size:12px;
+        line-height:1.45;
+      }
+
+      .leaflet-control-zoom a{
+        width:44px !important;
+        height:44px !important;
+        line-height:44px !important;
+        font-size:22px !important;
+      }
+
+      .sectionMarker{
+        width:28px;
+        height:28px;
+      }
+
+      .inspectMarker{
+        width:32px;
+        height:32px;
+      }
+
+      .drawPrompt{
+        top:max(8px, env(safe-area-inset-top));
+        width:calc(100vw - 72px);
+        min-height:52px;
+        font-size:13px;
+      }
+
+      .drawPrompt button{
+        min-height:44px;
+      }
+
+      .shell.paneExpanded .rightStack{
+        position:fixed;
+        inset:
+          max(8px, env(safe-area-inset-top))
+          max(8px, env(safe-area-inset-right))
+          max(8px, env(safe-area-inset-bottom))
+          max(8px, env(safe-area-inset-left));
+        max-height:calc(100dvh - 16px);
+        overflow:hidden;
+      }
+
+      .shell.paneExpanded .toolPane.isExpanded{
+        min-height:0;
+        padding:14px;
+        gap:10px;
+        overflow:auto;
+        overscroll-behavior:contain;
+        -webkit-overflow-scrolling:touch;
+      }
+
+      .shell.paneExpanded .toolPane.isExpanded > *{
+        flex-shrink:0;
+      }
+
+      .shell.paneExpanded .toolTitleRow{
+        position:sticky;
+        top:-14px;
+        z-index:8;
+        margin:0 0 6px;
+        padding:12px 0 10px;
+        border-bottom:1px solid var(--line);
+        background:#0b1220;
+      }
+
+      .shell.paneExpanded .crossSectionPane .toolTitleRow{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:9px;
+      }
+
+      .shell.paneExpanded .crossSectionPane .toolTitle{
+        width:100%;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(124px,142px);
+        gap:8px;
+        align-items:center;
+        font-size:clamp(20px, 6.2vw, 25px);
+      }
+
+      .shell.paneExpanded .crossSectionPane .titleDatumToggle{
+        width:100%;
+        margin:0;
+      }
+
+      .shell.paneExpanded .crossSectionPane .paneActions{
+        width:100%;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 44px;
+        gap:8px;
+      }
+
+      .shell.paneExpanded .crossSectionPane .drawAction{
+        width:100%;
+      }
+
+      .shell.paneExpanded .crossSectionPane .chartWrap{
+        height:48dvh;
+        min-height:360px;
+      }
+
+      .shell.paneExpanded .floodHistoryPane .tinyChartWrap{
+        min-height:320px;
+      }
+    }
+
+    @media (max-width: 980px) and (max-height: 520px){
+      #map{
+        height:56vh;
+        height:56svh;
+        min-height:210px;
+        max-height:260px;
+      }
+
+      .titleBar{
+        min-height:64px;
+        padding:8px 12px;
+        flex-direction:row;
+        justify-content:space-between;
+        text-align:left;
+      }
+
+      .titleBar .brandText{
+        width:auto;
+      }
+
+      .titleBar h1{
+        font-size:24px;
+        white-space:nowrap;
+      }
+
+      .shell.paneExpanded .rightStack{
+        max-height:calc(100dvh - 12px);
+      }
+
+      .shell.paneExpanded .crossSectionPane .chartWrap,
+      .shell.paneExpanded .floodHistoryPane .tinyChartWrap{
+        height:250px;
+        min-height:250px;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse){
+      button,
+      input,
+      select,
+      .keyToggle{
+        touch-action:manipulation;
+      }
+    }
+
   </style>
 </head>
 <body>
   <div id="map" aria-label="Roads at Risk map"></div>
+  <div class="drawPrompt" id="drawPrompt" role="status" aria-live="polite" hidden>
+    <span id="drawPromptText">Tap the map to choose the first point.</span>
+    <button id="cancelDrawBtn" class="secondary" type="button">Cancel</button>
+  </div>
 
   <div class="shell" id="shell">
     <header class="titleBar">
@@ -1931,7 +2351,7 @@
           </div>
           <div class="paneActions">
             <button id="drawBtn" class="drawAction" type="button">Draw section</button>
-            <button class="expandBtn secondary" type="button" data-expand-pane="crossSectionPane" aria-label="Expand cross section" title="Expand cross section">+</button>
+            <button class="expandBtn secondary" type="button" data-expand-pane="crossSectionPane" aria-controls="crossSectionPane" aria-expanded="false" aria-label="Expand cross section" title="Expand cross section">+</button>
           </div>
         </div>
 
@@ -1996,7 +2416,7 @@
       <section class="toolPane floodHistoryPane" id="floodHistoryPane">
         <div class="toolTitleRow">
           <div class="toolTitle">Flood History <span class="pill" id="floodBucketPill">0.0 ft</span></div>
-          <button class="expandBtn secondary" type="button" data-expand-pane="floodHistoryPane" aria-label="Expand flood history" title="Expand flood history">+</button>
+          <button class="expandBtn secondary" type="button" data-expand-pane="floodHistoryPane" aria-controls="floodHistoryPane" aria-expanded="false" aria-label="Expand flood history" title="Expand flood history">+</button>
         </div>
 
         <aside class="floodPane floodCharts">
@@ -2295,10 +2715,14 @@
       document.querySelectorAll(".toolPane").forEach(item => item.classList.remove("isExpanded"));
       shell.classList.toggle("paneExpanded", shouldExpand);
       if(shouldExpand) pane.classList.add("isExpanded");
+      document.documentElement.classList.toggle("mobilePaneOpen", shouldExpand);
+      document.body.classList.toggle("mobilePaneOpen", shouldExpand);
       document.querySelectorAll("[data-expand-pane]").forEach(button => {
         const active = shouldExpand && button.dataset.expandPane === paneId;
         button.textContent = active ? "-" : "+";
-        const label = active ? "Shrink pane" : `Expand ${paneId === "floodHistoryPane" ? "flood history" : "cross section"}`;
+        const targetName = button.dataset.expandPane === "floodHistoryPane" ? "flood history" : "cross section";
+        const label = active ? `Collapse ${targetName}` : `Expand ${targetName}`;
+        button.setAttribute("aria-expanded", String(active));
         button.setAttribute("aria-label", label);
         button.title = label;
       });
@@ -3115,11 +3539,12 @@
     }
 
     function inspectIcon(){
+      const size = window.matchMedia("(max-width: 980px)").matches ? 36 : 22;
       return L.divIcon({
         className:"",
         html:"<div class='inspectMarker'></div>",
-        iconSize:[22,22],
-        iconAnchor:[11,11]
+        iconSize:[size,size],
+        iconAnchor:[size / 2,size / 2]
       });
     }
 
@@ -3263,11 +3688,12 @@
     }
 
     function markerIcon(){
+      const size = window.matchMedia("(max-width: 980px)").matches ? 32 : 18;
       return L.divIcon({
         className:"",
         html:"<div class='sectionMarker'></div>",
-        iconSize:[18,18],
-        iconAnchor:[9,9]
+        iconSize:[size,size],
+        iconAnchor:[size / 2,size / 2]
       });
     }
 
@@ -3327,6 +3753,11 @@
       $("drawBtn").classList.toggle("active", active);
       $("drawBtn").textContent = active ? "Click two points" : "Draw section";
       map.getContainer().style.cursor = active ? "crosshair" : "";
+      const prompt = $("drawPrompt");
+      if(prompt){
+        prompt.hidden = !active;
+        setText("drawPromptText", "Tap the map to choose the first point.");
+      }
     }
 
     function defaultSection(){
@@ -3737,7 +4168,15 @@
       defaultSection();
     }
 
-    $("drawBtn").addEventListener("click", () => setDrawMode(!state.drawMode));
+    $("drawBtn").addEventListener("click", () => {
+      const next = !state.drawMode;
+      setDrawMode(next);
+      if(next && window.matchMedia("(max-width: 980px)").matches){
+        if($("shell").classList.contains("paneExpanded")) togglePaneExpansion("crossSectionPane");
+        window.setTimeout(() => $("map").scrollIntoView({ behavior:"smooth", block:"start" }), 80);
+      }
+    });
+    $("cancelDrawBtn").addEventListener("click", () => setDrawMode(false));
     $("clearBtn").addEventListener("click", () => {
       setDrawMode(false);
       clearSection();
@@ -3779,6 +4218,19 @@
     document.querySelectorAll("[data-expand-pane]").forEach(button => {
       button.addEventListener("click", () => togglePaneExpansion(button.dataset.expandPane));
     });
+    document.addEventListener("keydown", event => {
+      if(event.key !== "Escape") return;
+      const expandedPane = document.querySelector(".toolPane.isExpanded");
+      if(expandedPane) togglePaneExpansion(expandedPane.id);
+    });
+    let responsiveResizeFrame = 0;
+    window.addEventListener("resize", () => {
+      window.cancelAnimationFrame(responsiveResizeFrame);
+      responsiveResizeFrame = window.requestAnimationFrame(() => {
+        map.invalidateSize();
+        resizeCharts();
+      });
+    }, { passive:true });
 
     map.on("click", event => {
       if(!state.drawMode){
@@ -3791,11 +4243,15 @@
         state.markers.forEach(m => map.removeLayer(m));
         state.markers = [L.marker(event.latlng, { icon:markerIcon() }).addTo(map)];
         setText("chartStatus", "Choose endpoint");
+        setText("drawPromptText", "Tap the map once more to choose the second point.");
         return;
       }
       const [a,b] = state.pendingPoints;
       setDrawMode(false);
       drawSection(a,b);
+      if(window.matchMedia("(max-width: 980px)").matches){
+        window.setTimeout(() => $("crossSectionPane").scrollIntoView({ behavior:"smooth", block:"start" }), 120);
+      }
     });
 
     renderChart([]);
