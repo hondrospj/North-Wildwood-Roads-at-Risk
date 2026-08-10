@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Roads at Risk - North Wildwood</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2322d3ee'/%3E%3Cpath d='M14 40h36M18 30h28M24 20h18' stroke='%2307111f' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2360a5fa'/%3E%3Cpath d='M14 40h36M18 30h28M24 20h18' stroke='%230b1220' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
 
   <link
     rel="stylesheet"
@@ -1724,6 +1724,174 @@
         overflow:auto;
       }
     }
+
+    /* North Wildwood Floodmapper visual palette */
+    :root{
+      --bg:#0b1220;
+      --panel:rgba(11,18,32,.88);
+      --panel2:rgba(11,18,32,.84);
+      --line:rgba(255,255,255,.085);
+      --line-strong:rgba(255,255,255,.16);
+      --text:#eaf0ff;
+      --muted:#a9b6d3;
+      --accent:#60a5fa;
+      --accent-soft:rgba(96,165,250,.14);
+      --accent-strong:#bfdbfe;
+      --accent2:#2dd4bf;
+      --risk:#d84b67;
+      --minor:#d58a00;
+      --moderate:#d84b67;
+      --major:#7c5ce0;
+      --warn:#d58a00;
+      --ok:#2dd4bf;
+      --below:#63d471;
+      --ink:#0b1220;
+      --shadow:0 22px 70px rgba(0,0,0,.40);
+    }
+
+    .titleBar{
+      background:var(--panel2);
+      border-color:var(--line);
+    }
+
+    .bottomPanel,
+    .panelBlock,
+    .toolPane,
+    .stat{
+      background:var(--panel);
+      border-color:var(--line);
+    }
+
+    .miniStat,
+    .metricRow,
+    .compactStats .stat,
+    .savedLine,
+    .keyToggle{
+      background:rgba(255,255,255,.04);
+      border-color:var(--line);
+    }
+
+    .eyebrow,
+    .pill{
+      color:var(--accent-strong);
+    }
+
+    .pill{
+      background:var(--accent-soft);
+      border-color:rgba(191,219,254,.30);
+    }
+
+    .badge,
+    .rangeRow,
+    .legend,
+    .tinyChartLabel,
+    .mapControlHeader,
+    .toolTitle,
+    .exportColumnTitle{
+      color:var(--text);
+    }
+
+    .miniStat .k,
+    .metricRow .k,
+    .modelNote,
+    .emptySaved,
+    .exportStatus,
+    .popupStats .tiny{
+      color:var(--muted);
+    }
+
+    .miniStat .v,
+    .metricRow .v,
+    .savedLineName,
+    .popupStats strong{
+      color:var(--text);
+    }
+
+    .dot{
+      box-shadow:0 0 0 4px rgba(45,212,191,.18);
+    }
+
+    button,
+    .fileLink{
+      border-color:var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+
+    button.active{
+      background:var(--accent-soft);
+      color:var(--accent-strong);
+      border-color:var(--accent-strong);
+    }
+
+    button.secondary{
+      background:rgba(255,255,255,.05);
+      border-color:var(--line-strong);
+      color:var(--text);
+    }
+
+    input[type="number"],
+    .lineForm input,
+    .exportFormatRow select{
+      border-color:var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+
+    .pointHero{
+      background:var(--accent-soft);
+      border-color:rgba(191,219,254,.30);
+    }
+
+    .pointHero .tag{
+      color:var(--text);
+    }
+
+    .presetGrid button.minor,
+    .thresholdCompact button.minor{
+      border-color:rgba(213,138,0,.42);
+      background:rgba(213,138,0,.16);
+      color:#f7d898;
+    }
+
+    .presetGrid button.moderate,
+    .thresholdCompact button.moderate{
+      border-color:rgba(216,75,103,.42);
+      background:rgba(216,75,103,.16);
+      color:#f8c7d1;
+    }
+
+    .presetGrid button.major,
+    .thresholdCompact button.major{
+      border-color:rgba(124,92,224,.44);
+      background:rgba(124,92,224,.18);
+      color:#dcd4fb;
+    }
+
+    .leaflet-control-zoom a{
+      background:rgba(11,18,32,.94) !important;
+      color:var(--text) !important;
+      border-color:var(--line-strong) !important;
+    }
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip{
+      background:#0b1220;
+      color:var(--text);
+      border-color:var(--line);
+    }
+
+    .sectionMarker{
+      background:var(--accent);
+      border-color:#172554;
+      box-shadow:0 0 0 3px rgba(96,165,250,.35);
+    }
+
+    .inspectMarker{
+      background:var(--moderate);
+      box-shadow:0 0 0 4px rgba(216,75,103,.28), 0 8px 22px rgba(11,18,32,.55);
+    }
+
   </style>
 </head>
 <body>
@@ -2261,7 +2429,7 @@
       if(stageFt >= thresholds.major) return { label:"Major+", color:"var(--major)" };
       if(stageFt >= thresholds.moderate) return { label:"Moderate", color:"var(--moderate)" };
       if(stageFt >= thresholds.minor) return { label:"Minor", color:"var(--minor)" };
-      return { label:"Below minor", color:"var(--ok)" };
+      return { label:"Below minor", color:"var(--below)" };
     }
 
     function countDailyExceedances(stageFt){
@@ -2481,7 +2649,7 @@
     function setReady(ok, text){
       $("readyText").textContent = text;
       $("readyDot").style.background = ok ? "var(--ok)" : "var(--warn)";
-      $("readyDot").style.boxShadow = ok ? "0 0 0 4px rgba(52,211,153,.18)" : "0 0 0 4px rgba(251,191,36,.18)";
+      $("readyDot").style.boxShadow = ok ? "0 0 0 4px rgba(45,212,191,.18)" : "0 0 0 4px rgba(213,138,0,.18)";
     }
 
     function mercatorFromLatLng(lat, lon){
