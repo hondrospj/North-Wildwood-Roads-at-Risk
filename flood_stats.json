@@ -1,7 +1,7 @@
 {
   "schema": "roads-at-risk-flood-stats-v2",
-  "generatedAt": "2026-08-07T13:44:26.473Z",
-  "gaugeName": "Great Channel at Stone Harbor",
+  "generatedAt": "2026-08-10T20:26:25.441Z",
+  "gaugeName": "Stone Harbor",
   "station": {
     "usgsGaugeId": "01411360",
     "usgsParameterCode": "72279",
@@ -11,30 +11,30 @@
   },
   "archive": {
     "startDate": "2007-10-01",
-    "endDate": "2026-08-07",
-    "days": 6671,
-    "years": 18.26,
+    "endDate": "2026-08-10",
+    "days": 6674,
+    "years": 18.27,
     "classificationCounts": {
-      "none": 5785,
+      "none": 5788,
       "minor": 817,
       "moderate": 65,
       "major": 4
     }
   },
   "tideModel": {
-    "highTideCount": 12892,
+    "highTideCount": 12899,
     "drawsPerYear": 706,
     "predictionRows": 300,
-    "trendFtPerYear": 0.0133806,
+    "trendFtPerYear": 0.01329462,
     "trendSource": {
       "station": "01411360",
-      "source": "Great Channel at Stone Harbor observed hourly monthly means",
+      "source": "Stone Harbor observed hourly monthly means",
       "datum": "NAVD88",
       "trendMethod": "monthly_mean_linear_regression",
       "monthlyPoints": 226,
       "firstMonth": "2007-10",
       "lastMonth": "2026-08",
-      "rawSlopeFtPerYear": 0.0133806
+      "rawSlopeFtPerYear": 0.01329462
     }
   },
   "datum": {
@@ -137,6 +137,7 @@
     }
   ],
   "dailyPeakNavd88Ft": [
+    -1.56,
     -1.08,
     -0.79,
     -0.64,
@@ -212,7 +213,6 @@
     0.82,
     0.83,
     0.84,
-    0.85,
     0.85,
     0.85,
     0.86,
@@ -3082,6 +3082,7 @@
     2.47,
     2.47,
     2.47,
+    2.47,
     2.48,
     2.48,
     2.48,
@@ -3992,6 +3993,7 @@
     2.67,
     2.67,
     2.67,
+    2.68,
     2.68,
     2.68,
     2.68,
@@ -5079,6 +5081,7 @@
     2.94,
     2.94,
     2.94,
+    2.95,
     2.95,
     2.95,
     2.95,
@@ -46832,8 +46835,26 @@
     },
     {
       "date": "2026-08-07",
-      "peakNavd88Ft": 0.85,
-      "peakMllwFt": 3.6,
+      "peakNavd88Ft": 2.47,
+      "peakMllwFt": 5.22,
+      "classification": "none"
+    },
+    {
+      "date": "2026-08-08",
+      "peakNavd88Ft": 2.68,
+      "peakMllwFt": 5.43,
+      "classification": "none"
+    },
+    {
+      "date": "2026-08-09",
+      "peakNavd88Ft": 2.95,
+      "peakMllwFt": 5.7,
+      "classification": "none"
+    },
+    {
+      "date": "2026-08-10",
+      "peakNavd88Ft": -1.56,
+      "peakMllwFt": 1.19,
       "classification": "none"
     }
   ]
