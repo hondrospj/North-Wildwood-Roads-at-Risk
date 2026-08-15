@@ -1892,6 +1892,10 @@
       box-shadow:0 0 0 4px rgba(216,75,103,.28), 0 8px 22px rgba(11,18,32,.55);
     }
 
+    .mobileToolNav{
+      display:none;
+    }
+
     .drawPrompt{
       position:fixed;
       top:max(12px, env(safe-area-inset-top));
@@ -1943,6 +1947,15 @@
         -webkit-text-size-adjust:100%;
       }
 
+      html{
+        overflow-y:auto;
+      }
+
+      body{
+        overflow-x:clip;
+        overflow-y:visible;
+      }
+
       html.mobilePaneOpen,
       body.mobilePaneOpen{
         overflow:hidden !important;
@@ -1966,9 +1979,49 @@
           max(10px, env(safe-area-inset-left));
       }
 
+      .mobileToolNav{
+        position:sticky;
+        top:max(8px, env(safe-area-inset-top));
+        z-index:720;
+        align-self:start;
+        width:100%;
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:6px;
+        padding:6px;
+        border:1px solid var(--line-strong);
+        border-radius:14px;
+        background:rgba(11,18,32,.94);
+        box-shadow:0 14px 34px rgba(0,0,0,.34);
+        backdrop-filter:blur(14px);
+        -webkit-backdrop-filter:blur(14px);
+      }
+
+      .mobileToolNav button{
+        min-width:0;
+        min-height:50px;
+        padding:9px 7px;
+        border-radius:10px;
+        font-size:13px;
+        line-height:1.15;
+        font-weight:950;
+      }
+
+      .mobileToolNav button[aria-current="true"]{
+        border-color:var(--accent-strong);
+        background:var(--accent-soft);
+        color:var(--accent-strong);
+        box-shadow:inset 0 0 0 1px rgba(191,219,254,.12);
+      }
+
       .titleBar{
         min-height:72px;
         padding:11px 14px;
+      }
+
+      .eyebrow{
+        font-size:12px;
+        line-height:1.2;
       }
 
       h1{
@@ -1979,7 +2032,7 @@
       .badge{
         min-height:30px;
         padding:6px 10px;
-        font-size:11px;
+        font-size:12px;
       }
 
       .mapControl,
@@ -1988,8 +2041,29 @@
       }
 
       .rightStack{
+        display:block;
         gap:12px;
-        grid-template-rows:auto auto auto;
+      }
+
+      .rightStack .mobileToolNav{
+        margin-bottom:12px;
+      }
+
+      .shell.paneExpanded .mobileToolNav{
+        display:none;
+      }
+
+      .shell.paneExpanded .rightStack{
+        display:grid;
+        grid-template-rows:minmax(0,1fr);
+      }
+
+      .rightStack .toolPane + .toolPane{
+        margin-top:12px;
+      }
+
+      .mapControlHeader{
+        font-size:14px;
       }
 
       .toolPane,
@@ -2007,7 +2081,13 @@
 
       .toolTitle{
         min-height:44px;
+        font-size:16px;
+        line-height:1.2;
         white-space:normal;
+      }
+
+      .toolPane{
+        scroll-margin-top:74px;
       }
 
       .crossSectionPane .toolTitleRow{
@@ -2053,7 +2133,7 @@
       .mapModes button,
       .titleDatumToggle button,
       .scenarioRow button{
-        font-size:12px;
+        font-size:13px;
       }
 
       .expandBtn{
@@ -2064,7 +2144,7 @@
 
       .drawAction{
         padding:9px 11px;
-        font-size:12px;
+        font-size:14px;
       }
 
       .titleDatumToggle{
@@ -2072,12 +2152,17 @@
       }
 
       .compactStats .stat{
-        min-height:64px;
+        min-height:70px;
         padding:10px;
       }
 
+      .compactStats .stat .k{
+        font-size:11px;
+        line-height:1.25;
+      }
+
       .compactStats .stat .v{
-        font-size:17px;
+        font-size:18px;
       }
 
       .thresholdCompact{
@@ -2087,11 +2172,11 @@
 
       .thresholdCompact button{
         min-height:48px;
-        font-size:12px;
+        font-size:13px;
       }
 
       .thresholdCompact button small{
-        font-size:10px;
+        font-size:11px;
       }
 
       .thresholdInputRow{
@@ -2112,10 +2197,19 @@
         margin-bottom:8px;
       }
 
+      .chartTitle{
+        font-size:16px;
+      }
+
+      .chartPills .pill,
+      .pill{
+        font-size:12px;
+      }
+
       .keyToggle{
         min-height:44px;
         padding:8px 10px;
-        font-size:12px;
+        font-size:13px;
       }
 
       .keyToggle input{
@@ -2137,6 +2231,11 @@
         touch-action:pan-y;
       }
 
+      .tinyChartLabel{
+        font-size:14px;
+        line-height:1.3;
+      }
+
       .lineForm{
         grid-template-columns:minmax(0,1fr) 76px;
         gap:8px;
@@ -2151,20 +2250,35 @@
       .savedLine button{
         min-height:44px;
         padding:8px 10px;
-        font-size:12px;
+        font-size:13px;
+      }
+
+      .exportColumnTitle{
+        font-size:15px;
+      }
+
+      .lineForm button,
+      .lineUtility button,
+      .exportActions button{
+        font-size:13px;
+      }
+
+      .savedLineName,
+      .emptySaved{
+        font-size:13px;
       }
 
       .exportStatus,
       .modelNote{
-        font-size:12px;
+        font-size:13px;
         line-height:1.45;
       }
 
       .leaflet-control-zoom a{
-        width:44px !important;
-        height:44px !important;
-        line-height:44px !important;
-        font-size:22px !important;
+        width:48px !important;
+        height:48px !important;
+        line-height:48px !important;
+        font-size:24px !important;
       }
 
       .sectionMarker{
@@ -2351,6 +2465,12 @@
     </section>
 
     <aside class="rightStack" aria-label="Roads at Risk tools">
+      <nav class="mobileToolNav" aria-label="Roads at Risk sections">
+        <button type="button" data-mobile-target="crossSectionPane" aria-label="Jump to cross section tools" aria-current="true">Profile</button>
+        <button type="button" data-mobile-target="floodHistoryPane" aria-label="Jump to flood history">History</button>
+        <button type="button" data-mobile-target="exportPane" aria-label="Jump to saved lines and export">Save &amp; Export</button>
+      </nav>
+
       <section class="toolPane crossSectionPane" id="crossSectionPane">
         <div class="toolTitleRow">
           <div class="toolTitle">
@@ -2445,7 +2565,7 @@
         </aside>
       </section>
 
-      <section class="toolPane exportPane" aria-label="Export features">
+      <section class="toolPane exportPane" id="exportPane" aria-label="Export features">
         <div class="exportGrid">
           <div class="exportColumn">
             <div class="exportColumnTitle">
@@ -2744,6 +2864,54 @@
         map.invalidateSize();
         resizeCharts();
       }, 180);
+    }
+
+    function setMobileToolActive(paneId){
+      document.querySelectorAll("[data-mobile-target]").forEach(button => {
+        button.setAttribute("aria-current", String(button.dataset.mobileTarget === paneId));
+      });
+    }
+
+    function installMobileToolNavigation(){
+      const buttons = [...document.querySelectorAll("[data-mobile-target]")];
+      const panes = buttons.map(button => $(button.dataset.mobileTarget)).filter(Boolean);
+      if(!buttons.length || !panes.length) return;
+
+      let navigationLockUntil = 0;
+
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          const pane = $(button.dataset.mobileTarget);
+          if(!pane) return;
+          navigationLockUntil = performance.now() + 1000;
+          setMobileToolActive(pane.id);
+          const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+          pane.scrollIntoView({ behavior, block:"start" });
+        });
+      });
+
+      let navigationFrame = 0;
+      const syncActiveSection = () => {
+        navigationFrame = 0;
+        if(!window.matchMedia("(max-width: 980px)").matches) return;
+        if(performance.now() < navigationLockUntil) return;
+        const atPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24;
+        let activePane = atPageEnd ? panes.at(-1) : panes[0];
+        if(!atPageEnd){
+          const anchor = Math.max(92, parseFloat(getComputedStyle(document.documentElement).fontSize) * 5.5);
+          panes.forEach(pane => {
+            if(pane.getBoundingClientRect().top <= anchor) activePane = pane;
+          });
+        }
+        setMobileToolActive(activePane.id);
+      };
+      const scheduleSync = () => {
+        if(navigationFrame) return;
+        navigationFrame = window.requestAnimationFrame(syncActiveSection);
+      };
+      window.addEventListener("scroll", scheduleSync, { passive:true });
+      window.addEventListener("resize", scheduleSync, { passive:true });
+      syncActiveSection();
     }
 
     function niceScaleFeet(maxFeet){
@@ -4229,6 +4397,7 @@
     document.querySelectorAll("[data-expand-pane]").forEach(button => {
       button.addEventListener("click", () => togglePaneExpansion(button.dataset.expandPane));
     });
+    installMobileToolNavigation();
     document.addEventListener("keydown", event => {
       if(event.key !== "Escape") return;
       const expandedPane = document.querySelector(".toolPane.isExpanded");
