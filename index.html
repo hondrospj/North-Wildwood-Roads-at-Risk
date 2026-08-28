@@ -823,6 +823,25 @@
       background:#7dd3fc;
       border:3px solid #082f49;
       box-shadow:0 0 0 3px rgba(125,211,252,.35);
+      position:relative;
+    }
+
+    .sectionMarkerLabel{
+      position:absolute;
+      left:50%;
+      bottom:calc(100% + 7px);
+      transform:translateX(-50%);
+      padding:3px 7px;
+      border:1px solid rgba(191,219,254,.7);
+      border-radius:8px;
+      background:rgba(11,18,32,.94);
+      color:#f8fafc;
+      font-size:14px;
+      font-weight:900;
+      line-height:1;
+      white-space:nowrap;
+      box-shadow:0 4px 14px rgba(2,6,23,.4);
+      pointer-events:none;
     }
 
     .inspectMarker{
@@ -844,7 +863,7 @@
     .popupStats strong{color:#f8fafc}
     .popupStats .tiny{color:#aab8ce;font-size:11px}
 
-    @media (max-width: 980px){
+    @media (max-width: 1180px){
       html,body{overflow:auto;height:auto;min-height:100%}
       #map{position:relative;height:58vh;min-height:420px}
       .shell{
@@ -1613,7 +1632,7 @@
       gap:10px;
     }
 
-    @media (max-height: 760px) and (min-width: 981px){
+    @media (max-height: 760px) and (min-width: 1181px){
       .mapControl{padding:8px}
       .pointStrip{display:none}
       .metricRows{grid-template-columns:1fr 1fr}
@@ -1639,7 +1658,7 @@
       .savedLine button{min-height:18px;padding:2px 5px}
     }
 
-    @media (max-width: 980px){
+    @media (max-width: 1180px){
       #map{
         position:relative;
         inset:auto;
@@ -1882,7 +1901,7 @@
     }
 
     .sectionMarker{
-      background:var(--accent);
+      background:var(--section-color,var(--accent));
       border-color:#172554;
       box-shadow:0 0 0 3px rgba(96,165,250,.35);
     }
@@ -1928,6 +1947,13 @@
       padding:7px 10px;
     }
 
+    .drawPromptActions{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
     button:focus-visible,
     input:focus-visible,
     select:focus-visible,
@@ -1936,7 +1962,7 @@
       outline-offset:2px;
     }
 
-    @media (max-width: 980px){
+    @media (max-width: 1180px){
       html,
       body{
         width:100%;
@@ -2388,7 +2414,7 @@
       }
     }
 
-    @media (max-width: 980px) and (max-height: 520px){
+    @media (max-width: 1180px) and (max-height: 520px){
       #map{
         height:56vh;
         height:56svh;
@@ -2433,13 +2459,1407 @@
       }
     }
 
+    /* Unified tablet/mobile workspace: readable cards, no rail collisions. */
+    @media (max-width: 1180px){
+      body{
+        background:#07111f;
+      }
+
+      #map{
+        height:48svh;
+        min-height:320px;
+        max-height:520px;
+        border-bottom:1px solid var(--line-strong);
+      }
+
+      .shell{
+        gap:12px;
+        padding:12px max(12px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+        background:linear-gradient(180deg,#07111f 0%,#0b1220 100%);
+      }
+
+      .titleBar,
+      .mapControl,
+      .rightStack{
+        width:min(100%, 960px);
+        margin-inline:auto;
+      }
+
+      .titleBar,
+      .panelBlock,
+      .toolPane,
+      .mobileToolNav{
+        border-radius:16px;
+        background:#111a2a;
+        backdrop-filter:none;
+        -webkit-backdrop-filter:none;
+        box-shadow:0 12px 30px rgba(0,0,0,.24);
+      }
+
+      .titleBar{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) auto;
+        align-items:center;
+        gap:12px;
+      }
+
+      .titleBar h1{
+        white-space:normal;
+        overflow-wrap:anywhere;
+      }
+
+      .mapModes{
+        gap:8px;
+      }
+
+      .mapModes button{
+        min-height:44px;
+        font-size:13px;
+      }
+
+      .rightStack,
+      .toolPane,
+      .crossSectionPane,
+      .floodHistoryPane,
+      .exportPane{
+        min-height:0;
+      }
+
+      .toolPane{
+        padding:14px;
+        overflow:hidden;
+      }
+
+      .toolTitleRow{
+        width:100%;
+        min-width:0;
+      }
+
+      .crossSectionPane .toolTitleRow{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) auto;
+        align-items:center;
+        gap:10px;
+      }
+
+      .crossSectionPane .toolTitle{
+        min-width:0;
+        grid-template-columns:auto minmax(116px,142px);
+      }
+
+      .crossSectionPane .paneActions{
+        width:auto;
+        grid-template-columns:auto 44px;
+      }
+
+      .compactStats{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .compactStats .stat{
+        min-width:0;
+        overflow:hidden;
+      }
+
+      .compactStats .stat .v{
+        font-size:clamp(16px,2.3vw,22px);
+        overflow-wrap:anywhere;
+      }
+
+      .thresholdCompact{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .profilePane,
+      .floodPane{
+        width:100%;
+        min-width:0;
+      }
+
+      .chartHeader,
+      .chartKey,
+      .tinyChartLabel{
+        flex-wrap:wrap;
+      }
+
+      .chartWrap{
+        height:clamp(280px,35vw,360px);
+        min-height:280px;
+      }
+
+      .tinyChartWrap{
+        height:clamp(230px,30vw,310px);
+        min-height:230px;
+      }
+
+      .exportGrid{
+        height:auto;
+      }
+
+      button, input, select, .keyToggle{
+        touch-action:manipulation;
+      }
+    }
+
+    @media (min-width:700px) and (max-width:1180px){
+      .exportGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:620px){
+      #map{
+        height:42svh;
+        min-height:280px;
+      }
+
+      .shell{
+        padding-inline:10px;
+      }
+
+      .titleBar{
+        min-height:66px;
+        padding:10px 12px;
+      }
+
+      .titleBar h1{
+        font-size:clamp(22px,7vw,28px);
+      }
+
+      .badge{
+        max-width:112px;
+        text-align:center;
+      }
+
+      .mapModes{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .crossSectionPane .toolTitleRow{
+        grid-template-columns:1fr;
+      }
+
+      .crossSectionPane .paneActions{
+        width:100%;
+        grid-template-columns:minmax(0,1fr) 44px;
+      }
+
+      .compactStats .stat{
+        min-height:66px;
+        padding:9px 8px;
+      }
+
+      .compactStats .stat .k{
+        font-size:10px;
+      }
+
+      .compactStats .stat .v{
+        font-size:clamp(14px,4.2vw,18px);
+      }
+
+      .chartWrap{
+        height:270px;
+        min-height:270px;
+      }
+
+      .tinyChartWrap{
+        height:220px;
+        min-height:220px;
+      }
+    }
+
+    /* RoadRisk workbench — shared Floodmapper/Dashboard design language. */
+    :root{
+      --right-rail:clamp(560px, 39vw, 680px);
+      --ui-gap:14px;
+      --map-control-h:116px;
+      --panel-radius:18px;
+      color-scheme:dark;
+    }
+
+    html{
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+
+    body{
+      font-size:16px;
+      font-synthesis:none;
+      text-rendering:optimizeLegibility;
+    }
+
+    button,
+    input,
+    select{
+      font:inherit;
+    }
+
+    button,
+    .fileLink,
+    input[type="number"],
+    .lineForm input,
+    .exportFormatRow select{
+      border-radius:12px;
+    }
+
+    button{
+      min-height:40px;
+      padding:9px 12px;
+      font-size:13px;
+      line-height:1.1;
+      letter-spacing:.005em;
+    }
+
+    .titleBar,
+    .panelBlock,
+    .toolPane,
+    .mobileToolNav,
+    .drawPrompt{
+      background:rgba(11,18,32,.94);
+      border:1px solid var(--line-strong);
+      box-shadow:0 22px 70px rgba(0,0,0,.36);
+      -webkit-backdrop-filter:blur(16px);
+      backdrop-filter:blur(16px);
+    }
+
+    .titleBar{
+      top:20px;
+      min-height:84px;
+      width:min(430px, calc(100vw - var(--right-rail) - 96px));
+      padding:14px 18px;
+      border-radius:22px;
+      gap:9px;
+    }
+
+    .eyebrow{
+      margin-bottom:4px;
+      font-size:12px;
+      letter-spacing:.13em;
+    }
+
+    h1{
+      font-size:clamp(30px, 2.4vw, 40px);
+      line-height:1.02;
+      letter-spacing:-.035em;
+    }
+
+    .badge{
+      min-height:30px;
+      padding:6px 11px;
+      font-size:12px;
+    }
+
+    .mapControl{
+      min-height:var(--map-control-h);
+      padding:12px;
+      border-radius:var(--panel-radius);
+    }
+
+    .mapControlHeader{
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .mapModes{
+      gap:8px;
+    }
+
+    .mapModes button{
+      min-height:42px;
+      padding:9px 6px;
+      border-radius:12px;
+      font-size:13px;
+    }
+
+    .rightStack{
+      top:calc(var(--ui-gap) + var(--map-control-h) + 10px);
+      grid-template-rows:minmax(570px, 1.65fr) minmax(310px, 1fr) minmax(180px, .58fr);
+      gap:12px;
+      padding-right:2px;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(96,165,250,.55) transparent;
+    }
+
+    .toolPane{
+      padding:14px;
+      border-radius:var(--panel-radius);
+    }
+
+    .toolTitleRow{
+      margin-bottom:12px;
+    }
+
+    .toolTitle{
+      gap:10px;
+      font-size:18px;
+      line-height:1.1;
+      letter-spacing:-.015em;
+    }
+
+    .titleDatumToggle{
+      width:164px;
+      gap:5px;
+    }
+
+    .titleDatumToggle button,
+    .drawAction,
+    .iconBtn,
+    .expandBtn{
+      min-height:38px;
+      font-size:12px;
+    }
+
+    .iconBtn,
+    .expandBtn{
+      width:40px;
+      min-width:40px;
+      padding:0;
+      font-size:22px;
+    }
+
+    .compactStats{
+      gap:9px;
+    }
+
+    .compactStats .stat{
+      min-height:68px;
+      padding:10px 11px;
+      border-radius:13px;
+      background:rgba(255,255,255,.04);
+    }
+
+    .stat .k,
+    .miniStat .k,
+    .metricRow .k{
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.15;
+      letter-spacing:.075em;
+    }
+
+    .compactStats .stat .v{
+      margin-top:6px;
+      font-size:20px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+
+    .thresholdCompact{
+      margin:10px 0;
+      gap:8px;
+    }
+
+    .thresholdCompact button{
+      min-height:44px;
+      font-size:13px;
+    }
+
+    .thresholdCompact button small{
+      font-size:10px;
+    }
+
+    .thresholdInputRow input,
+    .uncertaintyInline input,
+    .lineForm input,
+    .exportFormatRow select{
+      min-height:42px;
+      font-size:14px;
+    }
+
+    .chartHeader{
+      min-height:34px;
+      margin-bottom:9px;
+    }
+
+    .chartTitle{
+      font-size:16px;
+    }
+
+    .chartKey{
+      gap:7px;
+    }
+
+    #profileChartKey{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+    }
+
+    .keyToggle{
+      min-width:0;
+      min-height:34px;
+      padding:6px 9px;
+      gap:7px;
+      font-size:12px;
+    }
+
+    .keyToggle input{
+      width:16px;
+      height:16px;
+      min-width:16px;
+    }
+
+    .chartWrap{
+      min-height:230px;
+    }
+
+    .scenarioRow{
+      gap:8px;
+      margin-bottom:9px;
+    }
+
+    .scenarioRow button{
+      min-height:42px;
+      font-size:13px;
+    }
+
+    .tinyChartLabel{
+      margin:6px 0 4px;
+      font-size:13px;
+    }
+
+    .tinyChartWrap{
+      min-height:180px;
+    }
+
+    .exportColumnTitle{
+      font-size:15px;
+    }
+
+    .lineForm{
+      grid-template-columns:minmax(0,1fr) 70px;
+      gap:8px;
+    }
+
+    .lineForm button,
+    .exportActions button,
+    .lineUtility button{
+      min-height:42px;
+      font-size:13px;
+    }
+
+    .exportStatus,
+    .modelNote{
+      display:none;
+    }
+
+    .leaflet-control-zoom a{
+      width:40px !important;
+      height:40px !important;
+      line-height:40px !important;
+      font-size:22px !important;
+    }
+
+    @media (min-width:1181px) and (max-height:860px){
+      :root{
+        --right-rail:clamp(540px, 40vw, 620px);
+        --map-control-h:112px;
+      }
+
+      .mapControl{padding:10px}
+      .mapModes button{min-height:36px}
+      .rightStack{
+        grid-template-rows:minmax(570px, 1.6fr) minmax(300px, .95fr) minmax(180px, .55fr);
+      }
+    }
+
+    @media (max-width:1180px){
+      :root{
+        --ui-gap:12px;
+      }
+
+      html,
+      body{
+        min-height:100%;
+        min-height:100dvh;
+        overflow-x:hidden;
+      }
+
+      body{
+        background:#0b1220;
+      }
+
+      #map{
+        height:48vh;
+        height:48svh;
+        min-height:340px;
+        max-height:540px;
+      }
+
+      .shell{
+        gap:14px;
+        padding:
+          14px
+          max(14px, env(safe-area-inset-right))
+          max(22px, env(safe-area-inset-bottom))
+          max(14px, env(safe-area-inset-left));
+        background:linear-gradient(180deg,#0b1220 0%,#0f1a2d 100%);
+      }
+
+      .titleBar,
+      .mapControl,
+      .rightStack{
+        width:min(100%, 940px);
+      }
+
+      .titleBar{
+        top:auto;
+        left:auto;
+        transform:none;
+      }
+
+      .rightStack{
+        position:relative;
+        inset:auto;
+        top:auto;
+        right:auto;
+        bottom:auto;
+      }
+
+      .titleBar{
+        min-height:82px;
+        padding:14px 16px;
+        border-radius:18px;
+      }
+
+      h1{
+        font-size:clamp(28px, 5vw, 36px);
+      }
+
+      .mapControl{
+        padding:12px;
+        margin-bottom:4px;
+      }
+
+      .mapModes button{
+        min-height:48px;
+        font-size:14px;
+      }
+
+      .mobileToolNav{
+        position:relative;
+        top:auto;
+        gap:8px;
+        padding:7px;
+        border-radius:16px;
+      }
+
+      .rightStack .mobileToolNav{
+        margin:0 0 18px;
+      }
+
+      .mobileToolNav button{
+        min-height:50px;
+        font-size:14px;
+      }
+
+      .rightStack{
+        gap:14px;
+      }
+
+      .rightStack .toolPane + .toolPane{
+        margin-top:16px;
+      }
+
+      .toolPane{
+        padding:16px;
+      }
+
+      .toolTitle{
+        font-size:20px;
+      }
+
+      .chartWrap{
+        height:clamp(300px, 38vw, 380px);
+        min-height:300px;
+      }
+
+      .tinyChartWrap{
+        height:clamp(250px, 32vw, 330px);
+        min-height:250px;
+      }
+
+      .outlookChartsGrid{
+        gap:16px;
+      }
+
+      .outlookChartCard{
+        padding:14px;
+      }
+
+      .crossSectionPane,
+      .floodHistoryPane,
+      .exportPane{
+        scroll-margin-top:88px;
+      }
+    }
+
+    @media (max-width:620px){
+      #map{
+        height:43vh;
+        height:43svh;
+        min-height:300px;
+        max-height:410px;
+      }
+
+      .shell{
+        gap:12px;
+        padding-top:12px;
+        padding-inline:max(10px, env(safe-area-inset-left));
+      }
+
+      .titleBar{
+        min-height:72px;
+        padding:11px 12px;
+        gap:8px;
+      }
+
+      .eyebrow{
+        font-size:11px;
+      }
+
+      h1,
+      .titleBar h1{
+        font-size:clamp(25px, 7vw, 30px);
+        white-space:normal;
+      }
+
+      .badge{
+        max-width:none;
+        min-height:30px;
+        padding:5px 8px;
+        font-size:11px;
+      }
+
+      .mapModes{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .mapModes button{
+        min-height:46px;
+      }
+
+      .mobileToolNav button{
+        min-height:48px;
+        padding:8px 5px;
+        font-size:13px;
+      }
+
+      .toolPane{
+        padding:13px;
+      }
+
+      .toolTitleRow,
+      .crossSectionPane .toolTitleRow{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+
+      .toolTitle{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(138px,164px);
+        font-size:19px;
+      }
+
+      .paneActions,
+      .crossSectionPane .paneActions{
+        display:grid;
+        width:100%;
+        grid-template-columns:minmax(0,1fr) 44px;
+      }
+
+      .drawAction{
+        width:100%;
+      }
+
+      .compactStats{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:6px;
+      }
+
+      .compactStats .stat{
+        min-height:76px;
+        padding:9px 7px;
+      }
+
+      .compactStats .stat .v{
+        font-size:clamp(16px, 4.5vw, 19px);
+        overflow-wrap:anywhere;
+      }
+
+      .thresholdCompact{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .thresholdInputRow,
+      .uncertaintyInline{
+        grid-column:1 / -1;
+      }
+
+      .thresholdInputRow{
+        grid-template-columns:minmax(0,1fr) 84px;
+      }
+
+      .uncertaintyInline{
+        justify-content:end;
+      }
+
+      .chartHeader,
+      .chartKey,
+      .tinyChartLabel{
+        align-items:flex-start;
+      }
+
+      #profileChartKey{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .keyToggle{
+        font-size:11px;
+      }
+
+      .chartWrap{
+        height:280px;
+        min-height:280px;
+      }
+
+      .tinyChartWrap{
+        height:240px;
+        min-height:240px;
+      }
+
+      .exportGrid{
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+    }
+
+    @media (min-width:621px) and (max-width:1180px){
+      .crossSectionPane .toolTitleRow{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) auto;
+        align-items:center;
+        gap:12px;
+      }
+
+      .crossSectionPane .toolTitle{
+        width:auto;
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:10px;
+      }
+
+      .crossSectionPane .paneActions{
+        width:auto;
+        display:grid;
+        grid-template-columns:auto auto 40px 40px;
+        align-items:center;
+        gap:8px;
+      }
+
+      .shell.paneExpanded .crossSectionPane .paneActions{
+        width:100%;
+        grid-template-columns:minmax(0,1fr) auto 40px 40px;
+      }
+    }
+
+    @media (max-width:430px){
+      #map{
+        height:40vh;
+        height:40svh;
+        min-height:270px;
+      }
+
+      .titleBar{
+        grid-template-columns:minmax(0,1fr) auto;
+      }
+
+      .titleBar h1{
+        font-size:24px;
+      }
+
+      .badge{
+        font-size:10px;
+      }
+
+      .compactStats .stat .k{
+        font-size:9px;
+      }
+
+      .compactStats .stat .v{
+        font-size:15px;
+      }
+
+      .chartWrap{height:260px;min-height:260px}
+      .tinyChartWrap{height:220px;min-height:220px}
+    }
+
+    @media (max-width:900px) and (orientation:landscape),
+           (max-height:520px) and (pointer:coarse){
+      #map{
+        height:52vh;
+        height:52svh;
+        min-height:210px;
+        max-height:300px;
+      }
+
+      .shell{
+        padding-top:10px;
+      }
+
+      .titleBar{
+        min-height:64px;
+        grid-template-columns:minmax(0,1fr) auto;
+      }
+
+      .titleBar h1{
+        font-size:24px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *,
+      *::before,
+      *::after{
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+      }
+    }
+
+    /* Pane help and guided tutorial. */
+    .mapHeaderActions,
+    .paneHeaderActions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:7px;
+    }
+
+    .paneHelpBtn{
+      flex:0 0 auto;
+      width:38px;
+      min-width:38px;
+      height:38px;
+      min-height:38px;
+      display:inline-grid;
+      place-items:center;
+      padding:0;
+      border-radius:999px;
+      border:1px solid rgba(191,219,254,.34);
+      background:rgba(96,165,250,.12);
+      color:var(--accent-strong);
+      font-size:18px;
+      line-height:1;
+      font-weight:950;
+    }
+
+    .paneHelpBtn:hover,
+    .paneHelpBtn:focus-visible{
+      border-color:#7dd3fc;
+      background:rgba(96,165,250,.22);
+      color:#fff;
+    }
+
+    .tourLaunch{
+      min-height:38px;
+      padding:8px 12px;
+      border-color:rgba(191,219,254,.36);
+      background:var(--accent-soft);
+      color:var(--accent-strong);
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .exportPaneHeader{
+      flex:0 0 auto;
+      margin-bottom:11px;
+    }
+
+    .rrHelpBackdrop{
+      position:fixed;
+      inset:0;
+      z-index:18000;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      background:rgba(2,6,23,.72);
+      -webkit-backdrop-filter:blur(6px);
+      backdrop-filter:blur(6px);
+    }
+
+    .rrHelpBackdrop[hidden],
+    .rrTour[hidden]{
+      display:none !important;
+    }
+
+    .rrHelpCard{
+      width:min(540px, calc(100vw - 36px));
+      max-height:min(78vh, 680px);
+      max-height:min(78dvh, 680px);
+      overflow:auto;
+      padding:20px;
+      border:1px solid rgba(125,211,252,.34);
+      border-radius:22px;
+      background:linear-gradient(180deg,#101b2f 0%,#0b1220 100%);
+      box-shadow:0 28px 90px rgba(0,0,0,.64);
+    }
+
+    .rrHelpHead,
+    .rrTourHead,
+    .rrTourActions,
+    .rrHelpActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .rrHelpHead h2,
+    .rrTourCard h2{
+      margin:0;
+      color:#fff;
+      font-size:24px;
+      line-height:1.08;
+      letter-spacing:-.025em;
+    }
+
+    .rrDialogClose{
+      flex:0 0 auto;
+      width:38px;
+      min-width:38px;
+      min-height:38px;
+      padding:0;
+      border-radius:999px;
+      font-size:24px;
+      line-height:1;
+    }
+
+    .rrHelpBody,
+    .rrTourBody{
+      color:#cbdaf2;
+      font-size:15px;
+      line-height:1.58;
+    }
+
+    .rrHelpBody{
+      margin-top:15px;
+    }
+
+    .rrHelpBody p,
+    .rrTourBody p{
+      margin:0 0 11px;
+    }
+
+    .rrHelpBody p:last-child,
+    .rrTourBody p:last-child{
+      margin-bottom:0;
+    }
+
+    .rrHelpBody strong,
+    .rrTourBody strong{
+      color:#fff;
+    }
+
+    .rrHelpActions{
+      justify-content:flex-end;
+      margin-top:18px;
+    }
+
+    .rrHelpTourBtn{
+      min-height:42px;
+      border-color:rgba(96,165,250,.55);
+      background:var(--accent-soft);
+      color:var(--accent-strong);
+    }
+
+    .rrTour{
+      position:fixed;
+      inset:0;
+      z-index:20000;
+      pointer-events:none;
+    }
+
+    .rrTourSpotlight{
+      position:fixed;
+      left:0;
+      top:0;
+      width:1px;
+      height:1px;
+      border:3px solid #7dd3fc;
+      border-radius:20px;
+      box-shadow:
+        0 0 0 9999px rgba(2,6,23,.78),
+        0 0 0 7px rgba(96,165,250,.22),
+        0 18px 50px rgba(0,0,0,.44);
+      transition:left .22s ease, top .22s ease, width .22s ease, height .22s ease;
+      pointer-events:none;
+    }
+
+    .rrTourCard{
+      position:fixed;
+      z-index:20002;
+      width:min(430px, calc(100vw - 28px));
+      max-height:min(560px, calc(100vh - 28px));
+      max-height:min(560px, calc(100dvh - 28px));
+      overflow:auto;
+      padding:20px;
+      border:1px solid rgba(125,211,252,.44);
+      border-radius:22px;
+      background:rgba(8,15,31,.985);
+      color:#edf7ff;
+      box-shadow:0 28px 90px rgba(0,0,0,.64);
+      pointer-events:auto;
+    }
+
+    .rrTourProgress{
+      color:#7dd3fc;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+
+    .rrTourCard h2{
+      margin:13px 0 9px;
+    }
+
+    .rrTourActions{
+      margin-top:18px;
+    }
+
+    .rrTourActions button{
+      min-width:96px;
+      min-height:42px;
+    }
+
+    .rrTourActions button.primary{
+      border-color:#60a5fa;
+      background:#2563eb;
+      color:#fff;
+    }
+
+    .rrTourActions button:disabled{
+      opacity:.35;
+      cursor:default;
+    }
+
+    body.rrTourActive .drawPrompt{
+      display:none !important;
+    }
+
+    @media (max-width:620px){
+      .mapControlHeader{
+        align-items:center;
+      }
+
+      .tourLaunch{
+        min-height:40px;
+        padding-inline:10px;
+        font-size:12px;
+      }
+
+      .paneHelpBtn{
+        width:40px;
+        min-width:40px;
+        height:40px;
+        min-height:40px;
+      }
+
+      .crossSectionPane .paneActions{
+        grid-template-columns:minmax(0,1fr) auto 44px 44px;
+      }
+
+      .shell.paneExpanded .crossSectionPane .paneActions{
+        grid-template-columns:minmax(0,1fr) auto 44px 44px;
+      }
+
+      .floodHistoryPane .toolTitleRow,
+      .exportPane .toolTitleRow{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+      }
+
+      .rrHelpBackdrop{
+        align-items:end;
+        padding:10px max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+      }
+
+      .rrHelpCard{
+        width:100%;
+        max-height:78vh;
+        max-height:78dvh;
+        padding:17px;
+        border-radius:20px;
+      }
+
+      .rrTourCard{
+        left:10px !important;
+        right:10px !important;
+        top:auto !important;
+        bottom:max(10px, env(safe-area-inset-bottom)) !important;
+        width:auto;
+        max-height:48vh;
+        max-height:48dvh;
+        padding:17px;
+      }
+
+      .rrHelpHead h2,
+      .rrTourCard h2{
+        font-size:21px;
+      }
+
+      .rrHelpBody,
+      .rrTourBody{
+        font-size:14px;
+        line-height:1.52;
+      }
+    }
+
+    /* Separate measured history from modeled outlook. */
+    .outlookChartsGrid{
+      display:grid;
+      gap:10px;
+      flex:1 1 auto;
+      min-width:0;
+      min-height:0;
+    }
+
+    .outlookChartCard{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      min-width:0;
+      min-height:205px;
+      padding:10px;
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:13px;
+      background:rgba(2,6,23,.28);
+      overflow:hidden;
+    }
+
+    .observedOutlookCard{border-top:2px solid rgba(34,211,238,.72)}
+    .projectedOutlookCard{border-top:2px solid rgba(251,191,36,.78)}
+
+    .outlookChartHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      min-width:0;
+    }
+
+    .outlookChartHeader > div:first-child{min-width:0}
+
+    .outlookChartHeader h2{
+      margin:0;
+      color:#f4f8ff;
+      font-size:14px;
+      line-height:1.15;
+      letter-spacing:-.01em;
+    }
+
+    .outlookChartHeader p{
+      margin:3px 0 0;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:750;
+      line-height:1.25;
+    }
+
+    .outlookChartKey{
+      flex:0 0 auto;
+      justify-content:flex-end;
+    }
+
+    .outlookChartKey .keyToggle{
+      min-height:28px;
+      padding:4px 7px;
+      font-size:10px;
+    }
+
+    .outlookChartWrap{
+      flex:1 1 160px;
+      width:100%;
+      height:170px;
+      min-height:150px;
+    }
+
+    /* Keep the desktop tool rail inside Safari/macOS viewports. */
+    @media (min-width:1181px){
+      .rightStack{
+        max-width:calc(100vw - (var(--ui-gap) * 2));
+        overflow-x:hidden;
+      }
+
+      .shell:not(.paneExpanded) .rightStack{
+        grid-template-rows:auto minmax(0,1fr);
+        align-content:stretch;
+        overflow:hidden;
+        padding:0;
+      }
+
+      .shell:not(.paneExpanded) .mobileToolNav{
+        position:relative;
+        inset:auto;
+        z-index:2;
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:7px;
+        width:100%;
+        padding:7px;
+        border:1px solid var(--line-strong);
+        border-radius:14px;
+        background:rgba(11,18,32,.96);
+        box-shadow:var(--shadow);
+      }
+
+      .shell:not(.paneExpanded) .mobileToolNav button{
+        min-width:0;
+        min-height:44px;
+        padding:8px 7px;
+        border-radius:10px;
+        font-size:13px;
+        font-weight:950;
+      }
+
+      .shell:not(.paneExpanded) .mobileToolNav button[aria-current="true"]{
+        border-color:var(--accent-strong);
+        background:var(--accent-soft);
+        color:var(--accent-strong);
+        box-shadow:inset 0 0 0 1px rgba(191,219,254,.12);
+      }
+
+      .shell:not(.paneExpanded) .toolPane{
+        display:none;
+        width:100%;
+        height:auto;
+        max-height:100%;
+        min-height:0;
+        align-self:start;
+        overflow:auto;
+        overscroll-behavior:contain;
+        -webkit-overflow-scrolling:touch;
+      }
+
+      .shell:not(.paneExpanded) .toolPane.isWorkspaceActive{
+        display:flex;
+      }
+
+      .shell:not(.paneExpanded) .crossSectionPane .profilePane{
+        flex:0 0 auto;
+      }
+
+      .shell:not(.paneExpanded) .crossSectionPane .chartWrap{
+        flex:0 0 clamp(230px,34vh,340px);
+        height:clamp(230px,34vh,340px);
+        min-height:230px;
+        max-height:340px;
+      }
+
+      .shell:not(.paneExpanded) .floodHistoryPane .floodPane{
+        flex:0 0 auto;
+        overflow:visible;
+      }
+
+      .shell:not(.paneExpanded) .outlookChartsGrid{
+        grid-template-rows:repeat(2,minmax(205px,235px));
+        flex:0 0 auto;
+      }
+
+      .shell:not(.paneExpanded) .outlookChartWrap{
+        flex:1 1 150px;
+        height:155px;
+        min-height:145px;
+        max-height:175px;
+      }
+
+      .shell.paneExpanded .floodHistoryPane .floodPane{
+        grid-template-rows:auto minmax(0,1fr) auto;
+      }
+
+      .shell.paneExpanded .outlookChartsGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .shell.paneExpanded .outlookChartCard{
+        min-height:0;
+      }
+
+      .shell.paneExpanded .outlookChartWrap{
+        height:auto;
+        min-height:0;
+      }
+
+      .toolPane,
+      .toolTitleRow,
+      .chartHeader,
+      .tinyChartLabel,
+      .chartKey,
+      .exportGrid,
+      .exportColumn{
+        min-width:0;
+        max-width:100%;
+      }
+
+      .toolTitle{white-space:normal}
+
+      #observedFloodKey,
+      #projectedFloodKey{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      #observedFloodKey .keyToggle,
+      #projectedFloodKey .keyToggle{
+        min-width:0;
+        overflow:hidden;
+      }
+    }
+
+    @media (max-width:620px){
+      .outlookChartHeader{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+
+      .outlookChartKey{
+        justify-content:flex-start;
+      }
+
+      .outlookChartHeader h2{font-size:16px}
+      .outlookChartHeader p{font-size:11px}
+      .outlookChartCard{padding:11px}
+    }
+
+    #profileChart{touch-action:pan-y}
+
+    @media (max-width:430px){
+      .crossSectionPane .toolTitle{
+        grid-template-columns:minmax(0,1fr) minmax(0,144px);
+        gap:6px;
+      }
+
+      .crossSectionPane .titleDatumToggle{
+        width:100%;
+        min-width:0;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="map" aria-label="Roads at Risk map"></div>
   <div class="drawPrompt" id="drawPrompt" role="status" aria-live="polite" hidden>
     <span id="drawPromptText">Tap the map to choose the first point.</span>
-    <button id="cancelDrawBtn" class="secondary" type="button">Cancel</button>
+    <div class="drawPromptActions">
+      <button id="finishDrawBtn" type="button" hidden>Finish line</button>
+      <button id="cancelDrawBtn" class="secondary" type="button">Cancel</button>
+    </div>
   </div>
 
   <div class="shell" id="shell">
@@ -2448,12 +3868,15 @@
         <p class="eyebrow">North Wildwood</p>
         <h1>Roads at Risk</h1>
       </div>
-      <div class="badge"><span class="dot" id="readyDot"></span><span id="readyText">Loading DEM</span></div>
     </header>
 
     <section class="panelBlock mapControl" aria-label="Map view controls">
       <div class="mapControlHeader">
-        <span>Map View</span>
+        <span>Map</span>
+        <div class="mapHeaderActions">
+          <button id="roadRiskTourBtn" class="tourLaunch" type="button">Take the tour</button>
+          <button class="paneHelpBtn" type="button" data-help-key="map" aria-label="Explain the map pane" title="Explain the map pane">?</button>
+        </div>
       </div>
       <div class="mapModes" aria-label="Basemap">
         <button data-basemap="current" class="active" type="button">Light</button>
@@ -2466,22 +3889,24 @@
 
     <aside class="rightStack" aria-label="Roads at Risk tools">
       <nav class="mobileToolNav" aria-label="Roads at Risk sections">
-        <button type="button" data-mobile-target="crossSectionPane" aria-label="Jump to cross section tools" aria-current="true">Profile</button>
-        <button type="button" data-mobile-target="floodHistoryPane" aria-label="Jump to flood history">History</button>
-        <button type="button" data-mobile-target="exportPane" aria-label="Jump to saved lines and export">Save &amp; Export</button>
+        <button type="button" data-mobile-target="crossSectionPane" aria-label="Open Road Profile" aria-current="true">Profile</button>
+        <button type="button" data-mobile-target="floodHistoryPane" aria-label="Open Flood Outlook">Outlook</button>
+        <button type="button" data-mobile-target="exportPane" aria-label="Open Save and Export">Export</button>
       </nav>
 
-      <section class="toolPane crossSectionPane" id="crossSectionPane">
+      <section class="toolPane crossSectionPane isWorkspaceActive" id="crossSectionPane">
         <div class="toolTitleRow">
           <div class="toolTitle">
-            Cross Section
+            Road Profile
             <span class="titleDatumToggle" aria-label="Elevation datum">
               <button data-datum="navd88" class="active" type="button">NAVD88</button>
               <button data-datum="mllw" class="secondary" type="button">MLLW</button>
             </span>
           </div>
           <div class="paneActions">
-            <button id="drawBtn" class="drawAction" type="button">Draw section</button>
+            <button id="drawBtn" class="drawAction" type="button">Draw</button>
+            <button id="clearProfilesBtn" class="drawAction secondary" type="button" aria-label="Clear all profiles">Clear</button>
+            <button class="paneHelpBtn" type="button" data-help-key="profile" aria-label="Explain the road profile pane" title="Explain the road profile pane">?</button>
             <button class="expandBtn secondary" type="button" data-expand-pane="crossSectionPane" aria-controls="crossSectionPane" aria-expanded="false" aria-label="Expand cross section" title="Expand cross section">+</button>
           </div>
         </div>
@@ -2493,7 +3918,7 @@
               <div class="v" id="minElev">-</div>
             </div>
             <div class="stat">
-              <div class="k">Exposed share</div>
+              <div class="k">Flooded</div>
               <div class="v" id="exposedPct">-</div>
             </div>
             <div class="stat">
@@ -2534,7 +3959,7 @@
 
         <div class="profilePane">
           <div class="chartHeader">
-            <h2 class="chartTitle">Cross Section</h2>
+            <h2 class="chartTitle">Elevation</h2>
             <div class="chartPills">
               <span class="pill" id="thresholdPill">3.25 ft</span>
             </div>
@@ -2546,8 +3971,11 @@
 
       <section class="toolPane floodHistoryPane" id="floodHistoryPane">
         <div class="toolTitleRow">
-          <div class="toolTitle">Flood History <span class="pill" id="floodBucketPill">0.0 ft</span></div>
-          <button class="expandBtn secondary" type="button" data-expand-pane="floodHistoryPane" aria-controls="floodHistoryPane" aria-expanded="false" aria-label="Expand flood history" title="Expand flood history">+</button>
+          <div class="toolTitle">Flood Outlook <span class="pill" id="floodBucketPill">0.0 ft</span></div>
+          <div class="paneHeaderActions">
+            <button class="paneHelpBtn" type="button" data-help-key="outlook" aria-label="Explain the flood outlook pane" title="Explain the flood outlook pane">?</button>
+            <button class="expandBtn secondary" type="button" data-expand-pane="floodHistoryPane" aria-controls="floodHistoryPane" aria-expanded="false" aria-label="Expand flood history" title="Expand flood history">+</button>
+          </div>
         </div>
 
         <aside class="floodPane floodCharts">
@@ -2556,20 +3984,41 @@
             <button data-scenario="intermediate" class="active" type="button">Intermediate</button>
             <button data-scenario="high" class="secondary" type="button">High</button>
           </div>
-          <div class="tinyChartLabel annualLabel">
-            <span>Flood days by year</span>
-            <div class="chartKey" id="annualFloodKey" aria-label="Flood days by year key"></div>
+          <div class="outlookChartsGrid">
+            <section class="outlookChartCard observedOutlookCard" aria-labelledby="observedOutlookTitle">
+              <div class="outlookChartHeader">
+                <div>
+                  <h2 id="observedOutlookTitle">Observed History</h2>
+                  <p>Measured Flood Days by Year</p>
+                </div>
+                <div class="chartKey outlookChartKey" id="observedFloodKey" aria-label="Observed history key"></div>
+              </div>
+              <div class="tinyChartWrap outlookChartWrap observedChartWrap"><canvas id="observedAnnualChart"></canvas></div>
+            </section>
+            <section class="outlookChartCard projectedOutlookCard" id="projectedOutlookCard" aria-labelledby="projectedOutlookTitle">
+              <div class="outlookChartHeader">
+                <div>
+                  <h2 id="projectedOutlookTitle">Projected Outlook</h2>
+                  <p>Scenario Flood Days through 2100</p>
+                </div>
+                <div class="chartKey outlookChartKey" id="projectedFloodKey" aria-label="Projected outlook key"></div>
+              </div>
+              <div class="tinyChartWrap outlookChartWrap projectedChartWrap"><canvas id="projectedAnnualChart"></canvas></div>
+            </section>
           </div>
-          <div class="tinyChartWrap annualChartWrap"><canvas id="dotAnnualChart"></canvas></div>
           <p class="modelNote" id="projectionNote"></p>
         </aside>
       </section>
 
       <section class="toolPane exportPane" id="exportPane" aria-label="Export features">
+        <div class="toolTitleRow exportPaneHeader">
+          <div class="toolTitle">Save &amp; Export</div>
+          <button class="paneHelpBtn" type="button" data-help-key="export" aria-label="Explain the save and export pane" title="Explain the save and export pane">?</button>
+        </div>
         <div class="exportGrid">
           <div class="exportColumn">
             <div class="exportColumnTitle">
-              <span>Saved Lines</span>
+              <span>Saved</span>
               <span class="pill" id="savedLineCount">0</span>
             </div>
             <div class="lineForm">
@@ -2589,21 +4038,50 @@
               <span class="pill">CSV / SHP</span>
             </div>
             <div class="exportActions">
-              <button id="screenshotBtn" type="button">Screenshot (PNG)</button>
+              <button id="screenshotBtn" type="button">PNG image</button>
               <div class="exportFormatRow">
                 <select id="exportFormat" aria-label="Cross section export format">
-                  <option value="csv">CSV</option>
-                  <option value="shp">Shapefile (SHP)</option>
+                  <option value="csv">CSV — Coordinates + Elevation</option>
+                  <option value="shp">SHP — Lines + Elevation Points</option>
                   <option value="both">CSV + SHP</option>
                 </select>
                 <button id="exportBtn" class="secondary" type="button">Export</button>
               </div>
             </div>
-            <p class="exportStatus" id="exportStatus">Saved lines remain visible together. Choose CSV, SHP, or both for export.</p>
+            <p class="exportStatus" id="exportStatus" aria-live="polite"></p>
           </div>
         </div>
       </section>
     </aside>
+  </div>
+
+  <div id="roadRiskHelp" class="rrHelpBackdrop" hidden aria-hidden="true">
+    <section class="rrHelpCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskHelpTitle">
+      <header class="rrHelpHead">
+        <h2 id="roadRiskHelpTitle">About this pane</h2>
+        <button id="roadRiskHelpClose" class="rrDialogClose secondary" type="button" aria-label="Close explanation">×</button>
+      </header>
+      <div id="roadRiskHelpBody" class="rrHelpBody"></div>
+      <div class="rrHelpActions">
+        <button id="roadRiskHelpTour" class="rrHelpTourBtn" type="button">Show me in the tour</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="roadRiskTour" class="rrTour" hidden aria-hidden="true">
+    <div id="roadRiskTourSpotlight" class="rrTourSpotlight" aria-hidden="true"></div>
+    <section id="roadRiskTourCard" class="rrTourCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskTourTitle">
+      <header class="rrTourHead">
+        <span id="roadRiskTourProgress" class="rrTourProgress">1 of 12</span>
+        <button id="roadRiskTourClose" class="rrDialogClose secondary" type="button" aria-label="Close tutorial">×</button>
+      </header>
+      <h2 id="roadRiskTourTitle"></h2>
+      <div id="roadRiskTourBody" class="rrTourBody"></div>
+      <footer class="rrTourActions">
+        <button id="roadRiskTourBack" class="secondary" type="button">Back</button>
+        <button id="roadRiskTourNext" class="primary" type="button">Next</button>
+      </footer>
+    </section>
   </div>
 
   <script type="module">
@@ -2631,10 +4109,17 @@
       riskLine:null,
       savedLineLayers:null,
       activeSavedLineId:null,
+      comparisonSections:[],
+      activeVertexLabels:[],
+      activeSectionColor:"#22d3ee",
+      nextEndpointNumber:1,
+      pendingMarkers:[],
+      pendingLine:null,
       inspectMarker:null,
       profile:[],
       chart:null,
-      annualFloodChart:null,
+      observedAnnualChart:null,
+      projectedAnnualChart:null,
       floodBucketCache:new Map(),
       hillshadeOverlay:null,
       savedLines:[],
@@ -2642,6 +4127,7 @@
       thresholdFt:3.25,
       uncertaintyFt:.5,
       datum:"navd88",
+      profileXZoom:null,
       profileYZoom:null,
       activeBasemap:"current",
       projectionScenario:"intermediate"
@@ -2670,9 +4156,9 @@
 
     const map = L.map("map", { zoomControl:true, preferCanvas:true });
     const basemaps = {
-      current:L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-        maxZoom:20,
-        attribution:"&copy; OpenStreetMap contributors &copy; CARTO"
+      current:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:16,
+        attribution:"Tiles &copy; Esri"
       }),
       satellite:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
         maxZoom:20,
@@ -2686,9 +4172,9 @@
         maxZoom:19,
         attribution:"&copy; OpenStreetMap contributors"
       }),
-      dark:L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom:20,
-        attribution:"&copy; OpenStreetMap contributors &copy; CARTO"
+      dark:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:16,
+        attribution:"Tiles &copy; Esri"
       })
     };
     basemaps.current.addTo(map);
@@ -2705,6 +4191,7 @@
 
     const hillshadeLayerGroup = L.layerGroup().addTo(map);
     const savedLineLayerGroup = L.layerGroup().addTo(map);
+    const comparisonLayerGroup = L.layerGroup().addTo(map);
     state.savedLineLayers = new Map();
 
     function $(id){ return document.getElementById(id); }
@@ -2752,24 +4239,26 @@
     function chartFontSizes(paneId){
       const expanded = Boolean($("shell")?.classList.contains("paneExpanded") && $(paneId)?.classList.contains("isExpanded"));
       return {
-        tick:expanded ? 15 : 10,
-        title:expanded ? 17 : 11,
-        legend:expanded ? 15 : 11,
-        tooltip:expanded ? 15 : 12,
+        tick:expanded ? 16 : 12,
+        title:expanded ? 18 : 13,
+        legend:expanded ? 16 : 13,
+        tooltip:expanded ? 16 : 13,
         line:expanded ? 3 : 2,
         point:expanded ? 8 : 6
       };
     }
     function keyColor(dataset){
-      const isRange = String(dataset.label || "").toLowerCase().includes("range");
+      const label = String(dataset.label || "").toLowerCase();
+      const isRange = label.includes("range") || label.includes("uncertainty");
       const color = dataset.legendColor || (isRange ? dataset.backgroundColor : dataset.borderColor) || dataset.backgroundColor;
       return Array.isArray(color) ? color[0] : String(color || "#7dd3fc");
     }
     function keySwatchClass(dataset){
       const classes = ["keySwatch"];
+      const label = String(dataset.label || "").toLowerCase();
       if(dataset.showLine === false) classes.push("isPoint");
       else if(Array.isArray(dataset.borderDash) && dataset.borderDash.length) classes.push("isDashed");
-      else if(dataset.type === "bar" || String(dataset.label || "").toLowerCase().includes("range")) classes.push("isArea");
+      else if(dataset.type === "bar" || label.includes("range") || label.includes("uncertainty")) classes.push("isArea");
       return classes.join(" ");
     }
     function setDatasetGroupVisibility(chart, datasetIndex, visible){
@@ -2829,7 +4318,8 @@
 
     function resizeCharts(){
       state.chart?.resize();
-      state.annualFloodChart?.resize();
+      state.observedAnnualChart?.resize();
+      state.projectedAnnualChart?.resize();
     }
 
     function updateHillshadeOpacity(){
@@ -2866,10 +4356,23 @@
       }, 180);
     }
 
+    function desktopWorkspaceTabs(){
+      return window.matchMedia("(min-width: 1181px)").matches;
+    }
+
     function setMobileToolActive(paneId){
       document.querySelectorAll("[data-mobile-target]").forEach(button => {
         button.setAttribute("aria-current", String(button.dataset.mobileTarget === paneId));
       });
+      document.querySelectorAll(".rightStack > .toolPane").forEach(pane => {
+        pane.classList.toggle("isWorkspaceActive", pane.id === paneId);
+      });
+      if(desktopWorkspaceTabs()){
+        window.requestAnimationFrame(() => {
+          resizeCharts();
+          map.invalidateSize();
+        });
+      }
     }
 
     function installMobileToolNavigation(){
@@ -2885,6 +4388,10 @@
           if(!pane) return;
           navigationLockUntil = performance.now() + 1000;
           setMobileToolActive(pane.id);
+          if(desktopWorkspaceTabs()){
+            pane.scrollTop = 0;
+            return;
+          }
           const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
           pane.scrollIntoView({ behavior, block:"start" });
         });
@@ -2893,10 +4400,10 @@
       let navigationFrame = 0;
       const syncActiveSection = () => {
         navigationFrame = 0;
-        if(!window.matchMedia("(max-width: 980px)").matches) return;
+        if(!window.matchMedia("(max-width: 1180px)").matches) return;
         if(performance.now() < navigationLockUntil) return;
         const atPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24;
-        let activePane = atPageEnd ? panes.at(-1) : panes[0];
+        let activePane = atPageEnd ? panes[panes.length - 1] : panes[0];
         if(!atPageEnd){
           const anchor = Math.max(92, parseFloat(getComputedStyle(document.documentElement).fontSize) * 5.5);
           panes.forEach(pane => {
@@ -2912,6 +4419,286 @@
       window.addEventListener("scroll", scheduleSync, { passive:true });
       window.addEventListener("resize", scheduleSync, { passive:true });
       syncActiveSection();
+    }
+
+    const ROADRISK_PANE_HELP = {
+      map:{
+        title:"Map",
+        tourStep:1,
+        body:`<p>Choose the background that makes the road easiest to recognize. <strong>Light</strong> keeps the interface quiet, <strong>Aerial</strong> shows real-world features, <strong>Relief</strong> emphasizes terrain, <strong>Streets</strong> favors labels, and <strong>Dark</strong> reduces glare.</p><p>The red outline is the town boundary. The shaded elevation surface and every road-profile calculation stay the same when you change basemaps—the buttons only change the visual reference underneath.</p>`
+      },
+      profile:{
+        title:"Road Profile",
+        tourStep:2,
+        body:`<p>Press <strong>Draw</strong> and click along the road. Every click adds a numbered vertex—<strong>1, 2, 3, 4</strong>, and so on—so one profile can bend through as many points as needed. Press <strong>Finish line</strong> when the route is complete; the same numbers appear on the map and graph.</p><p>Draw again to retain the earlier profile and add another comparison line. Drag any vertex on the newest line to refine it. The summary and pink exposure layer describe that active line.</p>`
+      },
+      outlook:{
+        title:"Flood Outlook",
+        tourStep:7,
+        body:`<p>This pane asks a practical question: <strong>how often has water reached the selected road elevation, and how could that frequency change?</strong> The pill beside the title is the elevation currently being evaluated.</p><p><strong>Observed History</strong> has its own graph using the measured archive. <strong>Projected Outlook</strong> is separate so historical variability is never confused with a scenario. Low, Intermediate, and High are long-term sea-level pathways—not weather forecasts. The shaded <strong>Uncertainty</strong> area is a range; the solid yellow line is the central projection.</p>`
+      },
+      export:{
+        title:"Save & Export",
+        tourStep:10,
+        body:`<p>Name and save useful profiles when you want to compare several roads. Saved lines remain visible together and are stored in this browser, so they are convenient working notes rather than a shared database.</p><p><strong>PNG image</strong> captures the current view. CSV exports every sampled latitude, longitude, distance, elevation, threshold, and clearance. SHP packages the cross-section lines plus a separate elevation-point layer with the same coordinate attributes.</p>`
+      }
+    };
+
+    const ROADRISK_TOUR_STEPS = [
+      {
+        title:"Welcome to Roads at Risk",
+        target:".titleBar",
+        body:`<p>Think of this as a quick road-elevation stress test. Draw a route, choose a water level, and the app shows where that route is low enough to be exposed.</p><p><strong>It is a planning tool, not a road-closure order or a real-time emergency forecast.</strong> Use it to find weak points, compare routes, and frame better field questions.</p>`
+      },
+      {
+        title:"Pick the clearest map",
+        target:".mapControl",
+        body:`<p>Use <strong>Light</strong> for a clean working map, <strong>Aerial</strong> for recognizable buildings and pavement, <strong>Relief</strong> for terrain, <strong>Streets</strong> for labels, or <strong>Dark</strong> for low-glare viewing.</p><p>Changing the basemap never changes the elevation data, town boundary, profile, or risk result. It only changes what sits underneath your analysis.</p>`
+      },
+      {
+        title:"Draw the road you care about",
+        target:"#drawBtn",
+        body:`<p>Press <strong>Draw</strong>, then click each turn along the road. The vertices are numbered in order and those same numbers label the map and graph. Add as many points as the route needs, then press <strong>Finish line</strong>.</p><p>Draw again to compare another road without losing the first. Every vertex on the newest line remains editable. A chart gap means the route left the available elevation surface, not that elevation fell to zero.</p>`
+      },
+      {
+        title:"Read the three headline numbers",
+        target:".compactStats",
+        body:`<p><strong>Low point</strong> is the weakest sampled elevation along the line. <strong>Flooded</strong> is the percentage of the route at or below the chosen water level. <strong>Length</strong> is the measured distance between the endpoints.</p><p>Start here: a short route with one low point can tell a very different story from a long route with most of its length exposed.</p>`
+      },
+      {
+        title:"Keep the datum straight",
+        target:".titleDatumToggle",
+        body:`<p><strong>NAVD88</strong> is the surveyed land-elevation reference commonly used for roads and engineering. <strong>MLLW</strong> is a local tidal reference commonly used for water levels.</p><p>Switching datum changes the numbers shown so they share the selected reference; it does not move the road, reshape the terrain, or change which samples are above and below the equivalent water level.</p>`
+      },
+      {
+        title:"Set the water level",
+        target:".thresholdCompact",
+        body:`<p>The colored presets load this town's <strong>Minor, Moderate, and Major</strong> flood stages. For a specific scenario, type an exact level and press Apply.</p><p>That level drives the entire profile: pink segments are at or below it, the Flooded percentage is recalculated, and the dashed chart line moves with it. This is the fastest way to test how a few inches can change route exposure.</p>`
+      },
+      {
+        title:"Use the elevation chart",
+        target:".profilePane",
+        body:`<p>The cyan line is sampled ground elevation. Pink identifies samples at or below the threshold, the dashed line is your selected water level, and the dot marks the point being inspected.</p><p>Pinch with two fingers—or pinch on a Mac trackpad—to zoom into a specific stretch of the road. A regular mouse wheel changes the vertical scale. Double-click the chart to reset both views.</p>`
+      },
+      {
+        title:"Put that elevation in context",
+        target:".floodHistoryPane",
+        body:`<p>The pill beside Flood Outlook is the elevation being tested—typically the selected profile point. The chart counts archive days when the daily peak reached or exceeded that elevation.</p><p>This connects a physical low spot to a frequency: not just “how low is the road?” but “how often has water historically reached that height?”</p>`
+      },
+      {
+        title:"Choose a future pathway",
+        target:".scenarioRow",
+        body:`<p><strong>Low, Intermediate, and High</strong> represent different long-term sea-level-rise pathways. They are planning scenarios, not confidence grades and not predictions of tomorrow's tide.</p><p>Use Intermediate as a middle planning case, then compare Low and High to see whether the decision changes across a reasonable range of futures.</p>`
+      },
+      {
+        title:"Compare history with projection",
+        target:".outlookChartsGrid",
+        body:`<p>The two graphs deliberately keep evidence and scenario apart. <strong>Observed History</strong> uses cyan bars for measured Flood Days by Year. <strong>Projected Outlook</strong> uses a shaded gold Uncertainty range and a solid yellow central projection.</p><p>Read the observed graph first to understand recent variability, then use the projected graph to compare the direction and scale of change under the selected pathway.</p>`
+      },
+      {
+        title:"Save profiles for comparison",
+        target:".exportColumn:first-child",
+        body:`<p>Give the current line a short name and press Save. Its endpoints, selected threshold, and sampled profile stay available in this browser, and saved lines remain visible together on the map.</p><p>That makes it easy to compare an evacuation route, a low intersection, and an alternate crossing without redrawing each one from memory.</p>`
+      },
+      {
+        title:"Export something useful",
+        target:".exportColumn:nth-child(2)",
+        body:`<p><strong>PNG image</strong> is the quickest shareable snapshot. CSV includes sampled coordinates and elevation values. SHP creates a line layer and an elevation-point layer, both in WGS84 latitude/longitude; CSV + SHP packages both formats.</p><p>Before exporting, confirm the datum, threshold, route, and selected scenario—the export preserves the choices currently driving the screen.</p>`
+      }
+    ];
+
+    let roadRiskHelpKey = "map";
+    let roadRiskDialogReturnFocus = null;
+    let roadRiskTourIndex = 0;
+    let roadRiskTourReturnFocus = null;
+    let roadRiskTourPositionHandler = null;
+
+    function closeRoadRiskHelp(){
+      const modal = $("roadRiskHelp");
+      if(!modal || modal.hidden) return;
+      modal.hidden = true;
+      modal.setAttribute("aria-hidden", "true");
+      roadRiskDialogReturnFocus?.focus?.();
+      roadRiskDialogReturnFocus = null;
+    }
+
+    function openRoadRiskHelp(key, trigger){
+      const item = ROADRISK_PANE_HELP[key];
+      const modal = $("roadRiskHelp");
+      if(!item || !modal) return;
+      roadRiskHelpKey = key;
+      roadRiskDialogReturnFocus = trigger || document.activeElement;
+      setText("roadRiskHelpTitle", item.title);
+      $("roadRiskHelpBody").innerHTML = item.body;
+      modal.hidden = false;
+      modal.setAttribute("aria-hidden", "false");
+      $("roadRiskHelpClose")?.focus();
+    }
+
+    function visibleRoadRiskTourTarget(selector){
+      return [...document.querySelectorAll(selector)].find(element => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return rect.width > 4 && rect.height > 4 && style.display !== "none" && style.visibility !== "hidden";
+      }) || document.querySelector(selector);
+    }
+
+    function positionRoadRiskTour(){
+      const tutorial = $("roadRiskTour");
+      if(!tutorial || tutorial.hidden) return;
+      const step = ROADRISK_TOUR_STEPS[roadRiskTourIndex];
+      const target = step ? visibleRoadRiskTourTarget(step.target) : null;
+      const spotlight = $("roadRiskTourSpotlight");
+      const card = $("roadRiskTourCard");
+      if(!target || !spotlight || !card) return;
+
+      const rect = target.getBoundingClientRect();
+      const pad = 8;
+      const left = Math.max(4, rect.left - pad);
+      const top = Math.max(4, rect.top - pad);
+      spotlight.style.left = `${left}px`;
+      spotlight.style.top = `${top}px`;
+      spotlight.style.width = `${Math.max(20, Math.min(window.innerWidth - left - 4, rect.width + pad * 2))}px`;
+      spotlight.style.height = `${Math.max(20, Math.min(window.innerHeight - top - 4, rect.height + pad * 2))}px`;
+
+      if(window.innerWidth <= 620){
+        card.style.setProperty("left", "10px", "important");
+        card.style.setProperty("right", "10px", "important");
+        card.style.setProperty("top", "auto", "important");
+        card.style.setProperty("bottom", "max(10px, env(safe-area-inset-bottom))", "important");
+        return;
+      }
+
+      const margin = 14;
+      const gap = 18;
+      const cardRect = card.getBoundingClientRect();
+      const width = Math.min(cardRect.width, window.innerWidth - margin * 2);
+      const height = Math.min(cardRect.height, window.innerHeight - margin * 2);
+      const clampLeft = value => Math.max(margin, Math.min(window.innerWidth - width - margin, value));
+      const clampTop = value => Math.max(margin, Math.min(window.innerHeight - height - margin, value));
+      const targetBox = {
+        left:Math.max(0, rect.left - pad),
+        top:Math.max(0, rect.top - pad),
+        right:Math.min(window.innerWidth, rect.right + pad),
+        bottom:Math.min(window.innerHeight, rect.bottom + pad)
+      };
+      const candidates = [
+        [rect.left - width - gap, rect.top],
+        [rect.right + gap, rect.top],
+        [rect.left, rect.bottom + gap],
+        [rect.left, rect.top - height - gap],
+        [margin, margin],
+        [window.innerWidth - width - margin, margin],
+        [margin, window.innerHeight - height - margin],
+        [window.innerWidth - width - margin, window.innerHeight - height - margin]
+      ].map(([x,y]) => ({ left:clampLeft(x), top:clampTop(y) }));
+      const overlap = candidate => {
+        const w = Math.max(0, Math.min(candidate.left + width, targetBox.right) - Math.max(candidate.left, targetBox.left));
+        const h = Math.max(0, Math.min(candidate.top + height, targetBox.bottom) - Math.max(candidate.top, targetBox.top));
+        return w * h;
+      };
+      candidates.sort((a,b) => overlap(a) - overlap(b));
+      card.style.setProperty("left", `${candidates[0].left}px`, "important");
+      card.style.setProperty("top", `${candidates[0].top}px`, "important");
+      card.style.setProperty("right", "auto", "important");
+      card.style.setProperty("bottom", "auto", "important");
+    }
+
+    function renderRoadRiskTourStep(){
+      const step = ROADRISK_TOUR_STEPS[roadRiskTourIndex];
+      if(!step) return;
+      if(desktopWorkspaceTabs()){
+        const pane = document.querySelector(step.target)?.closest(".toolPane");
+        if(pane) setMobileToolActive(pane.id);
+      }
+      setText("roadRiskTourProgress", `${roadRiskTourIndex + 1} of ${ROADRISK_TOUR_STEPS.length}`);
+      setText("roadRiskTourTitle", step.title);
+      $("roadRiskTourBody").innerHTML = step.body;
+      $("roadRiskTourBack").disabled = roadRiskTourIndex === 0;
+      setText("roadRiskTourNext", roadRiskTourIndex === ROADRISK_TOUR_STEPS.length - 1 ? "Finish" : "Next");
+
+      window.setTimeout(() => {
+        const target = visibleRoadRiskTourTarget(step.target);
+        target?.scrollIntoView({ block:"center", inline:"nearest", behavior:"auto" });
+        window.setTimeout(positionRoadRiskTour, 80);
+        window.setTimeout(positionRoadRiskTour, 260);
+      }, 30);
+    }
+
+    function setRoadRiskTourOpen(open, startIndex=0){
+      const tutorial = $("roadRiskTour");
+      if(!tutorial) return;
+      if(open){
+        closeRoadRiskHelp();
+        const expandedPane = document.querySelector(".toolPane.isExpanded");
+        if(expandedPane) togglePaneExpansion(expandedPane.id);
+        roadRiskTourReturnFocus = document.activeElement;
+        roadRiskTourIndex = clamp(Math.round(startIndex), 0, ROADRISK_TOUR_STEPS.length - 1);
+        tutorial.hidden = false;
+        tutorial.setAttribute("aria-hidden", "false");
+        document.body.classList.add("rrTourActive");
+        roadRiskTourPositionHandler = () => positionRoadRiskTour();
+        window.addEventListener("resize", roadRiskTourPositionHandler);
+        document.addEventListener("scroll", roadRiskTourPositionHandler, true);
+        renderRoadRiskTourStep();
+        $("roadRiskTourNext")?.focus();
+      }else{
+        tutorial.hidden = true;
+        tutorial.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("rrTourActive");
+        if(roadRiskTourPositionHandler){
+          window.removeEventListener("resize", roadRiskTourPositionHandler);
+          document.removeEventListener("scroll", roadRiskTourPositionHandler, true);
+          roadRiskTourPositionHandler = null;
+        }
+        roadRiskTourReturnFocus?.focus?.();
+        roadRiskTourReturnFocus = null;
+      }
+    }
+
+    function installRoadRiskHelpAndTour(){
+      document.querySelectorAll("[data-help-key]").forEach(button => {
+        button.addEventListener("click", () => openRoadRiskHelp(button.dataset.helpKey, button));
+      });
+      $("roadRiskHelpClose")?.addEventListener("click", closeRoadRiskHelp);
+      $("roadRiskHelp")?.addEventListener("click", event => {
+        if(event.target === $("roadRiskHelp")) closeRoadRiskHelp();
+      });
+      $("roadRiskHelpTour")?.addEventListener("click", () => {
+        const step = ROADRISK_PANE_HELP[roadRiskHelpKey]?.tourStep || 0;
+        closeRoadRiskHelp();
+        setRoadRiskTourOpen(true, step);
+      });
+      $("roadRiskTourBtn")?.addEventListener("click", () => setRoadRiskTourOpen(true, 0));
+      $("roadRiskTourClose")?.addEventListener("click", () => setRoadRiskTourOpen(false));
+      $("roadRiskTourBack")?.addEventListener("click", () => {
+        if(roadRiskTourIndex > 0){
+          roadRiskTourIndex -= 1;
+          renderRoadRiskTourStep();
+        }
+      });
+      $("roadRiskTourNext")?.addEventListener("click", () => {
+        if(roadRiskTourIndex >= ROADRISK_TOUR_STEPS.length - 1) setRoadRiskTourOpen(false);
+        else{
+          roadRiskTourIndex += 1;
+          renderRoadRiskTourStep();
+        }
+      });
+      document.addEventListener("keydown", event => {
+        const helpOpen = !$("roadRiskHelp")?.hidden;
+        const tourOpen = !$("roadRiskTour")?.hidden;
+        if(!helpOpen && !tourOpen) return;
+        if(event.key === "Escape"){
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if(helpOpen) closeRoadRiskHelp();
+          if(tourOpen) setRoadRiskTourOpen(false);
+          return;
+        }
+        if(!tourOpen) return;
+        if(event.key === "ArrowRight") $("roadRiskTourNext")?.click();
+        if(event.key === "ArrowLeft") $("roadRiskTourBack")?.click();
+      });
     }
 
     function niceScaleFeet(maxFeet){
@@ -3250,9 +5037,8 @@
     }
 
     function setReady(ok, text){
-      $("readyText").textContent = text;
-      $("readyDot").style.background = ok ? "var(--ok)" : "var(--warn)";
-      $("readyDot").style.boxShadow = ok ? "0 0 0 4px rgba(45,212,191,.18)" : "0 0 0 4px rgba(213,138,0,.18)";
+      document.documentElement.dataset.demStatus = ok ? "ready" : "unavailable";
+      document.documentElement.dataset.demStatusText = text || "";
     }
 
     function mercatorFromLatLng(lat, lon){
@@ -3293,25 +5079,44 @@
       };
     }
 
-    function buildProfile(a, b){
-      const lengthFt = haversineFeet(a, b);
-      const stepFt = 5;
-      const n = clamp(Math.ceil(lengthFt / stepFt), 12, 1200);
+    function polylineVertexDistances(points){
+      const distances = [0];
+      for(let i=1; i<points.length; i++){
+        distances.push(distances[i - 1] + haversineFeet(points[i - 1], points[i]));
+      }
+      return distances;
+    }
+
+    function buildProfilePath(points){
+      if(!Array.isArray(points) || points.length < 2) return [];
+      const vertexDistances = polylineVertexDistances(points);
+      const totalLengthFt = vertexDistances[vertexDistances.length - 1];
+      const stepFt = Math.max(5, totalLengthFt / 2400);
       const rows = [];
       let lastValidDistance = null;
-      for(let i=0; i<=n; i++){
-        const t = i / n;
-        const p = interpolatePoint(a, b, t);
-        const elev = sampleDem(p.lat, p.lng);
-        const distance = lengthFt * t;
-        if(Number.isFinite(elev)){
-          lastValidDistance = distance;
-          rows.push({ distanceFt:distance, elevationFt:elev, lat:p.lat, lng:p.lng });
-        }else if(lastValidDistance !== null){
-          rows.push({ distanceFt:distance, elevationFt:null, lat:p.lat, lng:p.lng });
+      for(let segmentIndex=0; segmentIndex<points.length - 1; segmentIndex++){
+        const a = points[segmentIndex];
+        const b = points[segmentIndex + 1];
+        const segmentLengthFt = haversineFeet(a, b);
+        const samples = Math.max(1, Math.ceil(segmentLengthFt / stepFt));
+        for(let i=segmentIndex ? 1 : 0; i<=samples; i++){
+          const t = i / samples;
+          const p = interpolatePoint(a, b, t);
+          const elev = sampleDem(p.lat, p.lng);
+          const distance = vertexDistances[segmentIndex] + segmentLengthFt * t;
+          if(Number.isFinite(elev)){
+            lastValidDistance = distance;
+            rows.push({ distanceFt:distance, elevationFt:elev, lat:p.lat, lng:p.lng });
+          }else if(lastValidDistance !== null){
+            rows.push({ distanceFt:distance, elevationFt:null, lat:p.lat, lng:p.lng });
+          }
         }
       }
       return rows;
+    }
+
+    function buildProfile(a, b){
+      return buildProfilePath([a, b]);
     }
 
     function updateStats(profile){
@@ -3379,7 +5184,11 @@
     }
 
     function profileDisplayRange(profile){
-      const values = profile
+      const profiles = [
+        ...state.comparisonSections.map(section => section.profile || []),
+        profile || []
+      ];
+      const values = profiles.flat()
         .map(p => toDisplayDatum(p.elevationFt))
         .filter(Number.isFinite);
       const threshold = toDisplayDatum(state.thresholdFt);
@@ -3392,18 +5201,108 @@
         max += .25;
       }
       const pad = Math.max(.25, (max - min) * .12);
-      return { min:min - pad, max:max + pad };
+      let roundedMin = Math.floor(min - pad);
+      let roundedMax = Math.ceil(max + pad);
+      if(roundedMax <= roundedMin) roundedMax = roundedMin + 1;
+      return { min:roundedMin, max:roundedMax };
+    }
+
+    function profileDisplayXMax(profile=state.profile){
+      const profiles = [
+        ...state.comparisonSections.map(section => section.profile || []),
+        profile || []
+      ];
+      return Math.max(1, ...profiles.flat().map(point => Number(point.distanceFt) || 0));
     }
 
     function applyProfileZoom(chart){
-      if(!chart || !state.profileYZoom) return;
-      chart.options.scales.y.min = state.profileYZoom.min;
-      chart.options.scales.y.max = state.profileYZoom.max;
+      if(!chart) return;
+      if(state.profileYZoom){
+        chart.options.scales.y.min = state.profileYZoom.min;
+        chart.options.scales.y.max = state.profileYZoom.max;
+      }
+      if(state.profileXZoom){
+        chart.options.scales.x.min = state.profileXZoom.min;
+        chart.options.scales.x.max = state.profileXZoom.max;
+      }
+    }
+
+    function setProfileXZoom(center, factor, startRange=state.profileXZoom){
+      if(!state.chart || state.profile.length < 2 || !Number.isFinite(center) || !Number.isFinite(factor)) return;
+      const fullMin = 0;
+      const fullMax = profileDisplayXMax();
+      const currentMin = Number.isFinite(startRange?.min) ? startRange.min : fullMin;
+      const currentMax = Number.isFinite(startRange?.max) ? startRange.max : fullMax;
+      const currentSpan = Math.max(1, currentMax - currentMin);
+      const nextSpan = clamp(currentSpan * factor, Math.min(Math.max(5, fullMax * .005), fullMax), fullMax);
+      const centerRatio = clamp((center - currentMin) / currentSpan, 0, 1);
+      let nextMin = center - nextSpan * centerRatio;
+      let nextMax = nextMin + nextSpan;
+      if(nextMin < fullMin){
+        nextMin = fullMin;
+        nextMax = nextSpan;
+      }
+      if(nextMax > fullMax){
+        nextMax = fullMax;
+        nextMin = fullMax - nextSpan;
+      }
+      state.profileXZoom = nextSpan >= fullMax - .01 ? null : { min:nextMin, max:nextMax };
+      if(state.profileXZoom){
+        state.chart.options.scales.x.min = state.profileXZoom.min;
+        state.chart.options.scales.x.max = state.profileXZoom.max;
+      }else{
+        delete state.chart.options.scales.x.min;
+        delete state.chart.options.scales.x.max;
+      }
+      state.chart.update("none");
+    }
+
+    function installProfilePinchZoom(){
+      const canvas = $("profileChart");
+      if(!canvas) return;
+      let pinch = null;
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+
+      canvas.addEventListener("touchstart", event => {
+        if(event.touches.length !== 2 || !state.chart || state.profile.length < 2) return;
+        event.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const centerPixel = ((event.touches[0].clientX + event.touches[1].clientX) / 2) - rect.left;
+        const center = state.chart.scales.x?.getValueForPixel(centerPixel);
+        if(!Number.isFinite(center)) return;
+        pinch = {
+          distance:Math.max(1, touchDistance(event.touches)),
+          center,
+          range:state.profileXZoom ? { ...state.profileXZoom } : null
+        };
+      }, { passive:false });
+
+      canvas.addEventListener("touchmove", event => {
+        if(!pinch || event.touches.length !== 2) return;
+        event.preventDefault();
+        const distance = Math.max(1, touchDistance(event.touches));
+        setProfileXZoom(pinch.center, pinch.distance / distance, pinch.range);
+      }, { passive:false });
+
+      const endPinch = event => {
+        if(event.touches.length < 2) pinch = null;
+      };
+      canvas.addEventListener("touchend", endPinch, { passive:true });
+      canvas.addEventListener("touchcancel", () => { pinch = null; }, { passive:true });
     }
 
     function handleProfileWheel(event){
       if(!state.chart || !state.profile.length) return;
       event.preventDefault();
+      if(event.ctrlKey || event.metaKey){
+        const xScale = state.chart.scales.x;
+        const center = xScale?.getValueForPixel(event.offsetX);
+        setProfileXZoom(center, event.deltaY < 0 ? .72 : 1.25);
+        return;
+      }
       const yScale = state.chart.scales.y;
       if(!yScale) return;
       const base = profileDisplayRange(state.profile);
@@ -3429,38 +5328,113 @@
         nextMax = limitMax;
         nextMin = nextMax - nextSpan;
       }
+      nextMin = Math.floor(nextMin);
+      nextMax = Math.ceil(nextMax);
+      if(nextMax <= nextMin) nextMax = nextMin + 1;
       state.profileYZoom = { min:nextMin, max:nextMax };
       applyProfileZoom(state.chart);
       state.chart.update("none");
     }
 
+    const profileVertexLabelsPlugin = {
+      id:"profileVertexLabels",
+      afterDatasetsDraw(chart){
+        const { ctx, chartArea } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if(!dataset.vertexMarkers?.length || !chart.isDatasetVisible(datasetIndex)) return;
+          const metaPoints = chart.getDatasetMeta(datasetIndex).data;
+          const dataPoints = dataset.data || [];
+          ctx.save();
+          ctx.font='900 11px ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif';
+          ctx.textAlign="center";
+          ctx.textBaseline="middle";
+          for(const vertex of dataset.vertexMarkers){
+            let bestIndex = -1;
+            let bestDistance = Infinity;
+            dataPoints.forEach((point, index) => {
+              if(!Number.isFinite(point?.y) || metaPoints[index]?.skip) return;
+              const delta = Math.abs(point.x - vertex.distanceFt);
+              if(delta < bestDistance){
+                bestDistance = delta;
+                bestIndex = index;
+              }
+            });
+            if(bestIndex < 0) continue;
+            const { x, y } = metaPoints[bestIndex];
+            if(x < chartArea.left - 2 || x > chartArea.right + 2 || y < chartArea.top - 2 || y > chartArea.bottom + 2) continue;
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fillStyle=dataset.borderColor || "#22d3ee";
+            ctx.fill();
+            ctx.lineWidth=2;
+            ctx.strokeStyle="#07111f";
+            ctx.stroke();
+            ctx.fillStyle="#07111f";
+            ctx.fillText(String(vertex.label), x, y + .5);
+          }
+          ctx.restore();
+        });
+      }
+    };
+
+    function profileNumberLabel(labels){
+      return labels?.length ? labels.join("–") : "Profile";
+    }
+
     function renderChart(profile){
       const ctx = $("profileChart");
-      const valid = profile.filter(p => Number.isFinite(p.elevationFt));
-      const labels = profile.map(p => Math.round(p.distanceFt));
-      const data = profile.map(p => Number.isFinite(p.elevationFt) ? toDisplayDatum(p.elevationFt) : null);
-      const riskData = profile.map(p => Number.isFinite(p.elevationFt) && p.elevationFt <= state.thresholdFt ? toDisplayDatum(p.elevationFt) : null);
-      const thresholdData = profile.map(() => toDisplayDatum(state.thresholdFt));
-      const inspectData = profile.map((p, i) => i === state.selectedIndex && Number.isFinite(p.elevationFt) ? toDisplayDatum(p.elevationFt) : null);
+      const activePoints = currentLineLatLngs() || [];
+      const activeLabels = state.activeVertexLabels.length
+        ? state.activeVertexLabels
+        : activePoints.map((_, index) => index + 1);
+      const activeSection = profile.length ? {
+        id:"active",
+        vertexLabels:activeLabels,
+        vertexDistances:polylineVertexDistances(activePoints),
+        color:state.activeSectionColor,
+        profile
+      } : null;
+      const sections = [...state.comparisonSections, ...(activeSection ? [activeSection] : [])];
+      const lineDatasets = sections.map(section => ({
+        label:`Profile ${profileNumberLabel(section.vertexLabels)}`,
+        keyLabel:profileNumberLabel(section.vertexLabels),
+        sectionId:section.id,
+        vertexMarkers:(section.vertexLabels || []).map((label, index) => ({
+          label,
+          distanceFt:section.vertexDistances?.[index] ?? 0
+        })),
+        profileSelectable:section.id === "active",
+        data:(section.profile || []).map(point => ({
+          x:point.distanceFt,
+          y:Number.isFinite(point.elevationFt) ? toDisplayDatum(point.elevationFt) : null
+        })),
+        legendColor:section.color,
+        borderColor:section.color,
+        backgroundColor:section.id === "active" ? `${section.color}24` : "transparent",
+        fill:section.id === "active",
+        pointRadius:0,
+        borderWidth:section.id === "active" ? chartFontSizes("crossSectionPane").line + 1 : chartFontSizes("crossSectionPane").line,
+        tension:.22,
+        spanGaps:false
+      }));
+      const maxX = profileDisplayXMax(profile);
+      const riskData = profile.map(point => ({
+        x:point.distanceFt,
+        y:Number.isFinite(point.elevationFt) && point.elevationFt <= state.thresholdFt ? toDisplayDatum(point.elevationFt) : null
+      }));
+      const thresholdValue = toDisplayDatum(state.thresholdFt);
+      const thresholdData = [{ x:0, y:thresholdValue }, { x:maxX, y:thresholdValue }];
+      const selectedPoint = profile[state.selectedIndex];
+      const inspectData = Number.isFinite(selectedPoint?.elevationFt)
+        ? [{ x:selectedPoint.distanceFt, y:toDisplayDatum(selectedPoint.elevationFt) }]
+        : [];
       const fonts = chartFontSizes("crossSectionPane");
       const yRange = state.profileYZoom || profileDisplayRange(profile);
       const config = {
         type:"line",
         data:{
-          labels,
           datasets:[
-            {
-              label:"Elevation",
-              data,
-              legendColor:"#22d3ee",
-              borderColor:"#22d3ee",
-              backgroundColor:"rgba(34,211,238,.16)",
-              fill:true,
-              pointRadius:0,
-              borderWidth:fonts.line,
-              tension:.22,
-              spanGaps:false
-            },
+            ...lineDatasets,
             {
               label:"Exposed below threshold",
               keyLabel:"Exposed",
@@ -3505,10 +5479,11 @@
         options:{
           responsive:true,
           maintainAspectRatio:false,
-          interaction:{ mode:"index", intersect:false },
+          interaction:{ mode:"nearest", intersect:false },
           onClick(event){
             const hits = state.chart.getElementsAtEventForMode(event, "nearest", { intersect:false }, true);
-            if(hits.length) selectProfileIndex(hits[0].index, true, true);
+            const hit = hits.find(item => state.chart.data.datasets[item.datasetIndex]?.profileSelectable);
+            if(hit) selectProfileIndex(hit.index, true, true);
           },
           plugins:{
             legend:{ display:false },
@@ -3516,7 +5491,10 @@
               titleFont:{ size:fonts.tooltip, weight:"800" },
               bodyFont:{ size:fonts.tooltip },
               callbacks:{
-                title(items){ return `${items[0].label} ft along section`; },
+                title(items){
+                  const distance = items[0]?.parsed?.x;
+                  return Number.isFinite(distance) ? `${Math.round(distance)} ft Along Section` : "";
+                },
                 label(item){
                   const value = item.parsed?.y;
                   return Number.isFinite(value) ? `${item.dataset.label}: ${value.toFixed(2)} ft ${datumLabel()}` : null;
@@ -3526,19 +5504,28 @@
           },
           scales:{
             x:{
-              ticks:{ color:"#9fb0d1", maxTicksLimit:9, font:{ size:fonts.tick, weight:"700" } },
+              type:"linear",
+              min:state.profileXZoom?.min,
+              max:state.profileXZoom?.max,
+              ticks:{
+                color:"#9fb0d1",
+                maxTicksLimit:9,
+                font:{ size:fonts.tick, weight:"700" },
+                callback(value){ return Math.round(Number(value)); }
+              },
               grid:{ color:"rgba(148,163,184,.12)" },
-              title:{ display:true, text:"Distance along section (ft)", color:"#bfdbfe", font:{ size:fonts.title, weight:"bold" } }
+              title:{ display:true, text:"Numbered Endpoints · Distance Along Section (ft)", color:"#bfdbfe", font:{ size:fonts.title, weight:"bold" } }
             },
             y:{
               min:yRange.min,
               max:yRange.max,
-              ticks:{ color:"#9fb0d1", font:{ size:fonts.tick, weight:"700" } },
+              ticks:{ color:"#9fb0d1", precision:0, maxTicksLimit:7, font:{ size:fonts.tick, weight:"700" } },
               grid:{ color:"rgba(148,163,184,.14)" },
               title:{ display:true, text:`Elevation (ft ${datumLabel()})`, color:"#bfdbfe", font:{ size:fonts.title, weight:"bold" } }
             }
           }
-        }
+        },
+        plugins:[profileVertexLabelsPlugin]
       };
       if(state.chart){
         const visibility = chartVisibility(state.chart);
@@ -3553,54 +5540,92 @@
       resizeCharts();
     }
 
-    function renderAnnualFloodChart(bucketStats){
-      const canvas = $("dotAnnualChart");
+    function annualFloodScales(fonts){
+      return {
+        x:{
+          ticks:{ color:"#9fb0d1", maxRotation:0, autoSkip:true, maxTicksLimit:6, font:{ size:fonts.tick, weight:"700" } },
+          grid:{ display:false },
+          title:{ display:true, text:"Year", color:"#bfdbfe", font:{ size:fonts.title, weight:"bold" } }
+        },
+        y:{
+          beginAtZero:true,
+          ticks:{ color:"#9fb0d1", precision:0, maxTicksLimit:4, font:{ size:fonts.tick, weight:"700" } },
+          grid:{ color:"rgba(148,163,184,.12)" },
+          title:{ display:true, text:"Flood Days", color:"#bfdbfe", font:{ size:fonts.title, weight:"bold" } }
+        }
+      };
+    }
+
+    function renderObservedFloodChart(bucketStats){
+      const canvas = $("observedAnnualChart");
       if(!canvas) return;
       const fonts = chartFontSizes("floodHistoryPane");
-      const labels = bucketStats
-        ? [
-            ...bucketStats.annualRows.map(row => row.year),
-            ...bucketStats.future.map(row => row.year)
-          ]
-        : [];
-      const historicalLength = bucketStats?.annualRows?.length || 0;
-      const observed = bucketStats ? [
-        ...bucketStats.annualRows.map(row => row.count),
-        ...bucketStats.future.map(() => null)
-      ] : [];
-      const low = bucketStats ? [
-        ...bucketStats.annualRows.map(() => null),
-        ...bucketStats.future.map(row => row.low)
-      ] : [];
-      const high = bucketStats ? [
-        ...bucketStats.annualRows.map(() => null),
-        ...bucketStats.future.map(row => row.high)
-      ] : [];
-      const mean = bucketStats ? [
-        ...bucketStats.annualRows.map(() => null),
-        ...bucketStats.future.map(row => row.mean)
-      ] : [];
-
+      const labels = bucketStats ? bucketStats.annualRows.map(row => row.year) : [];
+      const observed = bucketStats ? bucketStats.annualRows.map(row => row.count) : [];
       const config = {
         type:"bar",
         data:{
           labels,
+          datasets:[{
+            label:"Observed",
+            data:observed,
+            legendColor:"rgba(34,211,238,.82)",
+            backgroundColor:"rgba(34,211,238,.72)",
+            borderColor:"rgba(125,211,252,.96)",
+            borderWidth:1,
+            borderRadius:2
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          animation:false,
+          interaction:{mode:"index", intersect:false},
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              titleFont:{size:fonts.tooltip,weight:"800"},
+              bodyFont:{size:fonts.tooltip},
+              callbacks:{
+                label(ctx){
+                  const value = ctx.parsed?.y;
+                  return Number.isFinite(value) ? `Observed: ${fmtFlood(value,0)} Flood Days` : null;
+                }
+              }
+            }
+          },
+          scales:annualFloodScales(fonts)
+        }
+      };
+      if(state.observedAnnualChart){
+        const visibility = chartVisibility(state.observedAnnualChart);
+        state.observedAnnualChart.data = config.data;
+        state.observedAnnualChart.options = config.options;
+        restoreChartVisibility(state.observedAnnualChart, visibility);
+        state.observedAnnualChart.update("none");
+      }else{
+        state.observedAnnualChart = new Chart(canvas, config);
+      }
+      renderChartKey(state.observedAnnualChart, "observedFloodKey");
+    }
+
+    function renderProjectedFloodChart(bucketStats){
+      const canvas = $("projectedAnnualChart");
+      if(!canvas) return;
+      const fonts = chartFontSizes("floodHistoryPane");
+      const labels = bucketStats ? bucketStats.future.map(row => row.year) : [];
+      const low = bucketStats ? bucketStats.future.map(row => row.low) : [];
+      const high = bucketStats ? bucketStats.future.map(row => row.high) : [];
+      const mean = bucketStats ? bucketStats.future.map(row => row.mean) : [];
+      const config = {
+        type:"line",
+        data:{
+          labels,
           datasets:[
             {
-              type:"bar",
-              label:"Observed",
-              data:observed,
-              legendColor:"rgba(34,211,238,.82)",
-              backgroundColor:"rgba(34,211,238,.72)",
-              borderColor:"rgba(125,211,252,.96)",
-              borderWidth:1,
-              order:20
-            },
-            {
-              type:"line",
-              label:"Forecast low",
+              label:"Projection low",
               legendHidden:true,
-              legendGroup:"annualForecastRange",
+              legendGroup:"projectedRange",
               data:low,
               borderWidth:0,
               pointRadius:0,
@@ -3610,10 +5635,9 @@
               order:12
             },
             {
-              type:"line",
-              label:"Forecast range",
-              keyLabel:"Forecast band",
-              legendGroup:"annualForecastRange",
+              label:"Uncertainty",
+              keyLabel:"Uncertainty",
+              legendGroup:"projectedRange",
               data:high,
               legendColor:"rgba(251,191,36,.46)",
               borderWidth:0,
@@ -3624,14 +5648,12 @@
               order:11
             },
             {
-              type:"line",
               label:"Projection",
               data:mean,
               legendColor:"rgba(251,191,36,.96)",
               borderColor:"rgba(251,191,36,.96)",
               backgroundColor:"rgba(251,191,36,.96)",
-              borderDash:[7,5],
-              borderWidth:fonts.line,
+              borderWidth:Math.max(3,fonts.line),
               pointRadius:0,
               pointHitRadius:8,
               tension:.2,
@@ -3644,55 +5666,45 @@
           responsive:true,
           maintainAspectRatio:false,
           animation:false,
-          interaction:{mode:"index", intersect:false},
+          interaction:{mode:"index",intersect:false},
           plugins:{
-            legend:{ display:false },
+            legend:{display:false},
             tooltip:{
-              titleFont:{ size:fonts.tooltip, weight:"800" },
-              bodyFont:{ size:fonts.tooltip },
+              titleFont:{size:fonts.tooltip,weight:"800"},
+              bodyFont:{size:fonts.tooltip},
               callbacks:{
                 label(ctx){
-                  const v = ctx.parsed?.y;
-                  if(!Number.isFinite(v)) return null;
-                  if(ctx.dataset.label === "Forecast low") return null;
-                  if(ctx.dataset.label === "Forecast range"){
+                  const value = ctx.parsed?.y;
+                  if(!Number.isFinite(value) || ctx.dataset.label === "Projection low") return null;
+                  if(ctx.dataset.label === "Uncertainty"){
                     const lowValue = low[ctx.dataIndex];
                     return Number.isFinite(lowValue)
-                      ? `Range: ${fmtFlood(lowValue, 0)} - ${fmtFlood(v, 0)} flood days`
+                      ? `Uncertainty: ${fmtFlood(lowValue,0)} - ${fmtFlood(value,0)} Flood Days`
                       : null;
                   }
-                  if(ctx.dataset.label === "Projection"){
-                    return `${bucketStats?.scenarioShort || "Scenario"} projection: ${fmtFlood(v, ctx.dataIndex >= historicalLength ? 1 : 0)} flood days`;
-                  }
-                  return `${ctx.dataset.label}: ${fmtFlood(v, ctx.dataIndex >= historicalLength ? 1 : 0)} flood days`;
+                  return `${bucketStats?.scenarioShort || "Scenario"} Projection: ${fmtFlood(value,1)} Flood Days`;
                 }
               }
             }
           },
-          scales:{
-            x:{
-              ticks:{ color:"#9fb0d1", maxRotation:0, autoSkip:true, maxTicksLimit:6, font:{ size:fonts.tick, weight:"700" } },
-              grid:{ display:false }
-            },
-            y:{
-              beginAtZero:true,
-              ticks:{ color:"#9fb0d1", precision:0, maxTicksLimit:4, font:{ size:fonts.tick, weight:"700" } },
-              grid:{ color:"rgba(148,163,184,.12)" }
-            }
-          }
+          scales:annualFloodScales(fonts)
         }
       };
-
-      if(state.annualFloodChart){
-        const visibility = chartVisibility(state.annualFloodChart);
-        state.annualFloodChart.data = config.data;
-        state.annualFloodChart.options = config.options;
-        restoreChartVisibility(state.annualFloodChart, visibility);
-        state.annualFloodChart.update("none");
+      if(state.projectedAnnualChart){
+        const visibility = chartVisibility(state.projectedAnnualChart);
+        state.projectedAnnualChart.data = config.data;
+        state.projectedAnnualChart.options = config.options;
+        restoreChartVisibility(state.projectedAnnualChart, visibility);
+        state.projectedAnnualChart.update("none");
       }else{
-        state.annualFloodChart = new Chart(canvas, config);
+        state.projectedAnnualChart = new Chart(canvas, config);
       }
-      renderChartKey(state.annualFloodChart, "annualFloodKey");
+      renderChartKey(state.projectedAnnualChart, "projectedFloodKey");
+    }
+
+    function renderAnnualFloodCharts(bucketStats){
+      renderObservedFloodChart(bucketStats);
+      renderProjectedFloodChart(bucketStats);
       resizeCharts();
     }
 
@@ -3704,7 +5716,7 @@
         setText("floodOutlook", "-");
         setText("annualFloodMeta", "Archive");
         setText("projectionNote", "");
-        renderAnnualFloodChart(null);
+        renderAnnualFloodCharts(null);
         return null;
       }
 
@@ -3713,12 +5725,12 @@
       setText("floodOutlook", bucketStats.projection2100 ? fmtFlood(bucketStats.projection2100.mean, 1) : "-");
       setText("annualFloodMeta", `${bucketStats.firstYear}-2100`);
       setText("projectionNote", "");
-      renderAnnualFloodChart(bucketStats);
+      renderAnnualFloodCharts(bucketStats);
       return bucketStats;
     }
 
     function inspectIcon(){
-      const size = window.matchMedia("(max-width: 980px)").matches ? 36 : 22;
+      const size = window.matchMedia("(max-width: 1180px)").matches ? 36 : 22;
       return L.divIcon({
         className:"",
         html:"<div class='inspectMarker'></div>",
@@ -3828,13 +5840,25 @@
     }
 
     function defaultInspectionIndex(profile){
+      const edgeBuffer = profile.length >= 40 ? Math.max(3, Math.floor(profile.length * .02)) : 0;
       let bestIndex = null;
-      for(let i=0; i<profile.length; i++){
-        const p = profile[i];
-        if(!Number.isFinite(p.elevationFt)) continue;
-        if(bestIndex === null || p.elevationFt < profile[bestIndex].elevationFt) bestIndex = i;
+      let bestScore = Infinity;
+      for(let i=edgeBuffer; i<profile.length - edgeBuffer; i++){
+        if(!Number.isFinite(profile[i]?.elevationFt)) continue;
+        const nearby = [];
+        for(let j=Math.max(0, i - 3); j<=Math.min(profile.length - 1, i + 3); j++){
+          if(Number.isFinite(profile[j]?.elevationFt)) nearby.push(profile[j].elevationFt);
+        }
+        if(nearby.length < 3) continue;
+        const score = nearby.reduce((sum, value) => sum + value, 0) / nearby.length;
+        if(score < bestScore || (score === bestScore && profile[i].elevationFt < profile[bestIndex]?.elevationFt)){
+          bestScore = score;
+          bestIndex = i;
+        }
       }
-      return bestIndex;
+      if(bestIndex !== null) return bestIndex;
+      const fallback = profile.findIndex(p => Number.isFinite(p.elevationFt));
+      return fallback >= 0 ? fallback : null;
     }
 
     function selectProfileIndex(index, rerender=false, openPopup=false){
@@ -3849,8 +5873,18 @@
       if(rerender) renderChart(state.profile);
     }
 
-    function clearSection(){
+    const SECTION_COLORS = ["#22d3ee","#a78bfa","#fbbf24","#34d399","#f472b6","#fb923c","#60a5fa","#e879f9"];
+
+    function removePendingDrawing(){
+      state.pendingMarkers.forEach(marker => map.removeLayer(marker));
+      state.pendingMarkers = [];
+      if(state.pendingLine) map.removeLayer(state.pendingLine);
+      state.pendingLine = null;
       state.pendingPoints = [];
+    }
+
+    function removeActiveSection(){
+      removePendingDrawing();
       state.markers.forEach(m => map.removeLayer(m));
       state.markers = [];
       if(state.line) map.removeLayer(state.line);
@@ -3859,33 +5893,92 @@
       state.riskLine = null;
       state.profile = [];
       state.activeSavedLineId = null;
+      state.activeVertexLabels = [];
       resetInspection();
+    }
+
+    function renderComparisonSections(){
+      comparisonLayerGroup.clearLayers();
+      for(const section of state.comparisonSections){
+        L.polyline(section.points, {
+          color:section.color,
+          weight:4,
+          opacity:.82,
+          lineCap:"round"
+        }).addTo(comparisonLayerGroup);
+        section.points.forEach((point, index) => {
+          const label = section.vertexLabels[index];
+          L.marker(point, {
+            icon:markerIcon(label, section.color),
+            interactive:false,
+            title:`Vertex ${label}`
+          }).addTo(comparisonLayerGroup);
+        });
+      }
+    }
+
+    function archiveActiveSection(){
+      const pts = currentLineLatLngs();
+      if(!pts || !state.profile.length || !state.activeVertexLabels.length) return;
+      const labels = state.activeVertexLabels.slice();
+      state.comparisonSections.push({
+        id:`drawn-${labels[0]}-${labels[labels.length - 1]}`,
+        vertexLabels:labels,
+        vertexDistances:polylineVertexDistances(pts),
+        color:state.activeSectionColor,
+        points:pts.map(point => L.latLng(point.lat, point.lng)),
+        profile:state.profile.slice()
+      });
+      renderComparisonSections();
+    }
+
+    function clearSection(){
+      removeActiveSection();
+      state.comparisonSections = [];
+      state.nextEndpointNumber = 1;
+      state.activeSectionColor = SECTION_COLORS[0];
+      comparisonLayerGroup.clearLayers();
       updateStats([]);
       renderChart([]);
       renderSavedLines();
       setText("chartStatus", "Waiting for a line");
     }
 
-    function markerIcon(){
-      const size = window.matchMedia("(max-width: 980px)").matches ? 32 : 18;
+    function markerIcon(label="", color=state.activeSectionColor){
+      const size = window.matchMedia("(max-width: 1180px)").matches ? 32 : 18;
       return L.divIcon({
         className:"",
-        html:"<div class='sectionMarker'></div>",
+        html:`<div class="sectionMarker" style="--section-color:${color}">${label ? `<span class="sectionMarkerLabel">${label}</span>` : ""}</div>`,
         iconSize:[size,size],
         iconAnchor:[size / 2,size / 2]
       });
     }
 
-    function drawSection(a, b, fit=false, savedLineId=null){
-      clearSection();
+    function drawSection(pointsOrA, b=null, fit=false, savedLineId=null, append=false){
+      const points = (Array.isArray(pointsOrA) ? pointsOrA : [pointsOrA, b])
+        .filter(Boolean)
+        .map(point => L.latLng(point.lat, point.lng));
+      if(points.length < 2) return;
+      if(append){
+        archiveActiveSection();
+        removeActiveSection();
+      }else{
+        clearSection();
+      }
       state.activeSavedLineId = savedLineId;
+      const startLabel = state.nextEndpointNumber;
+      state.activeVertexLabels = points.map((_, index) => startLabel + index);
+      state.nextEndpointNumber += points.length;
+      state.activeSectionColor = SECTION_COLORS[state.comparisonSections.length % SECTION_COLORS.length];
       renderSavedLines();
-      state.markers = [
-        L.marker(a, { icon:markerIcon(), draggable:true, zIndexOffset:2000, title:"Section endpoint" }).addTo(map),
-        L.marker(b, { icon:markerIcon(), draggable:true, zIndexOffset:2000, title:"Section endpoint" }).addTo(map)
-      ];
-      state.line = L.polyline([a, b], {
-        color:"#38bdf8",
+      state.markers = points.map((point, index) => L.marker(point, {
+        icon:markerIcon(state.activeVertexLabels[index]),
+        draggable:true,
+        zIndexOffset:2000,
+        title:`Section vertex ${state.activeVertexLabels[index]}`
+      }).addTo(map));
+      state.line = L.polyline(points, {
+        color:state.activeSectionColor,
         weight:5,
         opacity:.95,
         lineCap:"round"
@@ -3906,19 +5999,21 @@
         });
         marker.on("dragend", () => {
           const pts = state.markers.map(m => m.getLatLng());
-          runProfile(pts[0], pts[1]);
+          runProfile(pts);
         });
       }
-      if(fit) map.fitBounds(L.latLngBounds([a,b]).pad(.35));
-      runProfile(a, b);
+      if(fit) map.fitBounds(L.latLngBounds(points).pad(.35));
+      runProfile(points);
     }
 
-    function runProfile(a, b){
+    function runProfile(points){
       if(!state.raster){
         setText("chartStatus", "DEM still loading");
         return;
       }
-      state.profile = buildProfile(a, b);
+      state.profile = buildProfilePath(points);
+      state.profileXZoom = null;
+      state.profileYZoom = null;
       state.selectedIndex = defaultInspectionIndex(state.profile);
       updateStats(state.profile);
       renderRiskSegments(state.profile);
@@ -3928,21 +6023,36 @@
 
     function setDrawMode(active){
       state.drawMode = active;
-      state.pendingPoints = [];
+      removePendingDrawing();
       $("drawBtn").classList.toggle("active", active);
-      $("drawBtn").textContent = active ? "Click two points" : "Draw section";
+      $("drawBtn").textContent = active ? "Add points" : "Draw";
       map.getContainer().style.cursor = active ? "crosshair" : "";
       const prompt = $("drawPrompt");
       if(prompt){
         prompt.hidden = !active;
         setText("drawPromptText", "Tap the map to choose the first point.");
       }
+      const finishButton = $("finishDrawBtn");
+      if(finishButton) finishButton.hidden = true;
+    }
+
+    function finishPendingLine(){
+      if(!state.drawMode || state.pendingPoints.length < 2) return;
+      const points = state.pendingPoints.map(point => L.latLng(point.lat, point.lng));
+      setDrawMode(false);
+      drawSection(points, null, false, null, true);
+      if(window.matchMedia("(max-width: 1180px)").matches){
+        window.setTimeout(() => $("crossSectionPane").scrollIntoView({ behavior:"smooth", block:"start" }), 120);
+      }
     }
 
     function defaultSection(){
+      // Default municipality cross-section.
       drawSection(
         L.latLng(39.00307, -74.81208),
         L.latLng(39.00307, -74.79032),
+        false,
+        null,
         false
       );
     }
@@ -3953,25 +6063,30 @@
     }
 
     function exportLineRecords(){
-      const records = state.savedLines.map(line => ({
+      const records = state.comparisonSections.map(section => ({
+        id:section.id,
+        name:`Profile ${profileNumberLabel(section.vertexLabels)}`,
+        thresholdFt:state.thresholdFt,
+        createdAt:"",
+        points:section.points
+      }));
+      const active = currentLineLatLngs();
+      if(active && state.activeVertexLabels.length){
+        records.push({
+          id:`drawn-${state.activeVertexLabels[0]}-${state.activeVertexLabels[state.activeVertexLabels.length - 1]}`,
+          name:`Profile ${profileNumberLabel(state.activeVertexLabels)}`,
+          thresholdFt:state.thresholdFt,
+          createdAt:"",
+          points:active
+        });
+      }
+      records.push(...state.savedLines.map(line => ({
         id:line.id,
         name:line.name || "Saved line",
         thresholdFt:Number.isFinite(line.thresholdFt) ? line.thresholdFt : state.thresholdFt,
         createdAt:line.createdAt || "",
-        a:L.latLng(line.a.lat, line.a.lng),
-        b:L.latLng(line.b.lat, line.b.lng)
-      }));
-      const active = currentLineLatLngs();
-      if(active && !state.activeSavedLineId){
-        records.unshift({
-          id:"active-line",
-          name:"Active line",
-          thresholdFt:state.thresholdFt,
-          createdAt:"",
-          a:active[0],
-          b:active[1]
-        });
-      }
+        points:(line.points?.length ? line.points : [line.a, line.b]).map(point => L.latLng(point.lat, point.lng))
+      })));
       return records;
     }
 
@@ -3981,7 +6096,7 @@
         "threshold_ft_navd88","clearance_ft","latitude","longitude"
       ]];
       for(const record of records){
-        const profile = buildProfile(record.a, record.b);
+        const profile = buildProfilePath(record.points);
         profile.forEach((point, pointIndex) => rows.push([
           record.id,
           record.name,
@@ -3998,22 +6113,47 @@
     }
 
     function shapefileGeoJson(records){
-      return {
-        type:"FeatureCollection",
-        features:records.map(record => ({
+      const features = [];
+      for(const record of records){
+        const profile = buildProfilePath(record.points);
+        features.push({
           type:"Feature",
           geometry:{
             type:"LineString",
-            coordinates:[[record.a.lng, record.a.lat], [record.b.lng, record.b.lat]]
+            coordinates:profile.length
+              ? profile.map(point => [point.lng, point.lat])
+              : record.points.map(point => [point.lng, point.lat])
           },
           properties:{
             section_id:record.id,
             name:record.name,
             thresh_ft:Number(record.thresholdFt.toFixed(3)),
-            length_ft:Number((map.distance(record.a, record.b) * FT_PER_M).toFixed(2)),
+            length_ft:Number(polylineVertexDistances(record.points).slice(-1)[0].toFixed(2)),
             created:record.createdAt ? record.createdAt.slice(0, 10) : ""
           }
-        }))
+        });
+
+        profile.forEach((point, pointIndex) => {
+          features.push({
+            type:"Feature",
+            geometry:{ type:"Point", coordinates:[point.lng, point.lat] },
+            properties:{
+              section_id:record.id,
+              name:record.name,
+              point_idx:pointIndex,
+              dist_ft:Number(point.distanceFt.toFixed(2)),
+              elev_ft:Number.isFinite(point.elevationFt) ? Number(point.elevationFt.toFixed(3)) : null,
+              thresh_ft:Number(record.thresholdFt.toFixed(3)),
+              clear_ft:Number.isFinite(point.elevationFt) ? Number((point.elevationFt - record.thresholdFt).toFixed(3)) : null,
+              latitude:Number(point.lat.toFixed(8)),
+              longitude:Number(point.lng.toFixed(8))
+            }
+          });
+        });
+      }
+      return {
+        type:"FeatureCollection",
+        features
       };
     }
 
@@ -4034,7 +6174,10 @@
         folder:"roads_at_risk_cross_sections",
         outputType:"arraybuffer",
         compression:"STORE",
-        types:{ polyline:"cross_sections" }
+        types:{
+          point:"elevation_points",
+          polyline:"cross_sections"
+        }
       });
     }
 
@@ -4067,7 +6210,7 @@
             downloadBlob(combined, "roads-at-risk-cross-sections-csv-shp.zip");
           }
         }
-        setExportStatus(`${format === "both" ? "CSV + SHP" : format.toUpperCase()} exported for ${records.length} cross section${records.length === 1 ? "" : "s"}.`);
+        setExportStatus(`${format === "both" ? "CSV + SHP" : format.toUpperCase()} exported with WGS84 coordinates and sampled elevations for ${records.length} cross section${records.length === 1 ? "" : "s"}.`);
       }catch(err){
         console.error(err);
         setExportStatus(err?.message || "Export failed. Please try again.");
@@ -4106,7 +6249,7 @@
     function currentLineLatLngs(){
       if(state.markers.length >= 2) return state.markers.map(marker => marker.getLatLng());
       const linePoints = state.line?.getLatLngs?.();
-      return Array.isArray(linePoints) && linePoints.length >= 2 ? linePoints.slice(0, 2) : null;
+      return Array.isArray(linePoints) && linePoints.length >= 2 ? linePoints.slice() : null;
     }
 
     function sanitizeLineName(name){
@@ -4116,7 +6259,9 @@
     function loadSavedLines(){
       try{
         const rows = JSON.parse(localStorage.getItem(SAVED_LINES_KEY) || "[]");
-        state.savedLines = Array.isArray(rows) ? rows.filter(row => row?.a && row?.b && row?.id) : [];
+        state.savedLines = Array.isArray(rows)
+          ? rows.filter(row => row?.id && ((Array.isArray(row.points) && row.points.length >= 2) || (row?.a && row?.b)))
+          : [];
       }catch(err){
         console.warn("Saved line load failed", err);
         state.savedLines = [];
@@ -4136,10 +6281,9 @@
       if(!map._loaded) return;
       for(const saved of state.savedLines){
         if(saved.id === state.activeSavedLineId) continue;
-        const layer = L.polyline([
-          L.latLng(saved.a.lat, saved.a.lng),
-          L.latLng(saved.b.lat, saved.b.lng)
-        ], {
+        const savedPoints = (saved.points?.length ? saved.points : [saved.a, saved.b])
+          .map(point => L.latLng(point.lat, point.lng));
+        const layer = L.polyline(savedPoints, {
           color:"#a78bfa",
           weight:4,
           opacity:.86,
@@ -4205,7 +6349,8 @@
       const input = $("lineNameInput");
       const fallback = `Line ${state.savedLines.length + 1}`;
       const name = sanitizeLineName(input?.value) || fallback;
-      const [a, b] = pts;
+      const a = pts[0];
+      const b = pts[pts.length - 1];
       const id = `line-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
       state.savedLines.unshift({
         id,
@@ -4213,6 +6358,7 @@
         thresholdFt:state.thresholdFt,
         a:{ lat:a.lat, lng:a.lng },
         b:{ lat:b.lat, lng:b.lng },
+        points:pts.map(point => ({ lat:point.lat, lng:point.lng })),
         createdAt:new Date().toISOString()
       });
       state.savedLines = state.savedLines.slice(0, 12);
@@ -4227,7 +6373,9 @@
       if(!line) return;
       setDrawMode(false);
       setThreshold(toDisplayDatum(line.thresholdFt ?? state.thresholdFt));
-      drawSection(L.latLng(line.a.lat, line.a.lng), L.latLng(line.b.lat, line.b.lng), true, line.id);
+      const points = (line.points?.length ? line.points : [line.a, line.b])
+        .map(point => L.latLng(point.lat, point.lng));
+      drawSection(points, null, true, line.id);
       setExportStatus(`Loaded "${line.name || "saved line"}".`);
     }
 
@@ -4343,19 +6491,27 @@
       const image = await tiff.getImage();
       const raster = await image.readRasters({ interleave:true });
       state.raster = raster;
-      setReady(true, "DEM ready");
+      setReady(true, "Ready");
       defaultSection();
     }
 
     $("drawBtn").addEventListener("click", () => {
-      const next = !state.drawMode;
-      setDrawMode(next);
-      if(next && window.matchMedia("(max-width: 980px)").matches){
+      if(state.drawMode){
+        finishPendingLine();
+        return;
+      }
+      setDrawMode(true);
+      if(window.matchMedia("(max-width: 1180px)").matches){
         if($("shell").classList.contains("paneExpanded")) togglePaneExpansion("crossSectionPane");
         window.setTimeout(() => $("map").scrollIntoView({ behavior:"smooth", block:"start" }), 80);
       }
     });
+    $("finishDrawBtn").addEventListener("click", finishPendingLine);
     $("cancelDrawBtn").addEventListener("click", () => setDrawMode(false));
+    $("clearProfilesBtn").addEventListener("click", () => {
+      setDrawMode(false);
+      clearSection();
+    });
     $("clearBtn").addEventListener("click", () => {
       setDrawMode(false);
       clearSection();
@@ -4398,6 +6554,7 @@
       button.addEventListener("click", () => togglePaneExpansion(button.dataset.expandPane));
     });
     installMobileToolNavigation();
+    installRoadRiskHelpAndTour();
     document.addEventListener("keydown", event => {
       if(event.key !== "Escape") return;
       const expandedPane = document.querySelector(".toolPane.isExpanded");
@@ -4419,18 +6576,32 @@
         return;
       }
       state.pendingPoints.push(event.latlng);
-      if(state.pendingPoints.length === 1){
-        state.markers.forEach(m => map.removeLayer(m));
-        state.markers = [L.marker(event.latlng, { icon:markerIcon() }).addTo(map)];
-        setText("chartStatus", "Choose endpoint");
-        setText("drawPromptText", "Tap the map once more to choose the second point.");
-        return;
-      }
-      const [a,b] = state.pendingPoints;
-      setDrawMode(false);
-      drawSection(a,b);
-      if(window.matchMedia("(max-width: 980px)").matches){
-        window.setTimeout(() => $("crossSectionPane").scrollIntoView({ behavior:"smooth", block:"start" }), 120);
+      const color = SECTION_COLORS[state.comparisonSections.length % SECTION_COLORS.length];
+      const label = state.nextEndpointNumber + state.pendingPoints.length - 1;
+      state.pendingMarkers.push(L.marker(event.latlng, {
+        icon:markerIcon(label, color),
+        interactive:false,
+        title:`Section vertex ${label}`
+      }).addTo(map));
+      if(state.pendingPoints.length >= 2){
+        if(!state.pendingLine){
+          state.pendingLine = L.polyline(state.pendingPoints, {
+            color,
+            weight:5,
+            opacity:.88,
+            lineCap:"round",
+            dashArray:"8 6"
+          }).addTo(map);
+        }else{
+          state.pendingLine.setLatLngs(state.pendingPoints);
+        }
+        $("finishDrawBtn").hidden = false;
+        $("drawBtn").textContent = "Finish line";
+        setText("chartStatus", `${state.pendingPoints.length} vertices ready`);
+        setText("drawPromptText", "Add another point, or finish this line.");
+      }else{
+        setText("chartStatus", "Choose another point");
+        setText("drawPromptText", "Add the next point along the road.");
       }
     });
 
@@ -4438,14 +6609,16 @@
     updateStats([]);
     updateThresholdControls();
     $("profileChart").addEventListener("wheel", handleProfileWheel, { passive:false });
+    installProfilePinchZoom();
     $("profileChart").addEventListener("dblclick", () => {
+      state.profileXZoom = null;
       state.profileYZoom = null;
       renderChart(state.profile);
     });
     loadSavedLines();
     loadApp().catch(err => {
       console.error(err);
-      setReady(false, "DEM failed");
+      setReady(false, "Unavailable");
       setText("chartStatus", "DEM failed to load");
     });
   </script>
