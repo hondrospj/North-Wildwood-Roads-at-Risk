@@ -1565,9 +1565,8 @@
 
     .shell.paneExpanded .floodHistoryPane .floodPane{
       flex:1 1 auto;
-      display:grid;
-      grid-template-rows:auto auto minmax(0,1fr);
-      overflow:hidden;
+      display:block;
+      overflow:auto;
       padding-bottom:4px;
     }
 
@@ -3631,6 +3630,11 @@
       min-height:0;
     }
 
+    .outlookChartsGrid > .scenarioRow,
+    .shell.paneExpanded .outlookChartsGrid > .scenarioRow{
+      margin:0;
+    }
+
     .outlookChartCard{
       display:flex;
       flex-direction:column;
@@ -3775,7 +3779,7 @@
       }
 
       .shell:not(.paneExpanded) .outlookChartsGrid{
-        grid-template-rows:repeat(2,minmax(205px,235px));
+        grid-template-rows:minmax(205px,235px) auto minmax(205px,235px);
         flex:0 0 auto;
       }
 
@@ -3786,16 +3790,12 @@
         max-height:175px;
       }
 
-      .shell.paneExpanded .floodHistoryPane .floodPane{
-        grid-template-rows:auto minmax(0,1fr) auto;
-      }
-
       .shell.paneExpanded .outlookChartsGrid{
-        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-columns:minmax(0,1fr);
       }
 
       .shell.paneExpanded .outlookChartCard{
-        min-height:0;
+        min-height:320px;
       }
 
       .shell.paneExpanded .outlookChartWrap{
@@ -3849,14 +3849,6 @@
 
       .drawPromptActions button{
         width:100%;
-      }
-
-      #finishDrawBtn[hidden]{
-        display:none !important;
-      }
-
-      #finishDrawBtn[hidden] + #cancelDrawBtn{
-        grid-column:1 / -1;
       }
 
       .outlookChartHeader{
@@ -3956,6 +3948,15 @@
     }
 
     #profileChart{touch-action:pan-y}
+    .roadControls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .roadControls label{display:flex;align-items:center;gap:9px;min-height:44px;font-size:12px;cursor:pointer}
+    .roadControls input{width:21px;height:21px;margin:0;accent-color:#f59e0b;cursor:pointer}
+    .roadControls label::after{content:"";width:24px;border-top:2px dashed #f59e0b}
+    .roadStatus{margin-top:4px;font-size:11px;line-height:1.4;opacity:.8;overflow-wrap:anywhere}
+    .roadStatus:empty{display:none}
+    @media (min-width:1181px){
+      .shell:not(.paneExpanded) .rightStack{top:calc(var(--ui-gap) + var(--actual-map-control-h, 190px) + 10px)}
+    }
 
     @media (min-width:301px) and (max-width:430px){
       .crossSectionPane .toolTitle{
@@ -3968,18 +3969,128 @@
         min-width:0;
       }
     }
+    /* Keep all drawing controls together in the top Map box. */
+    .mapModes{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .crossSectionPane .toolTitleRow,
+    .shell.paneExpanded .crossSectionPane .toolTitleRow{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:10px;
+    }
+
+    .crossSectionPane .toolTitle,
+    .shell.paneExpanded .crossSectionPane .toolTitle{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      width:100%;
+      white-space:normal;
+    }
+
+    .crossSectionPane .titleDatumToggle{
+      width:min(164px,100%);
+      margin-left:0;
+    }
+
+    .crossSectionPane .paneActions,
+    .shell.paneExpanded .crossSectionPane .paneActions{
+      display:flex;
+      width:auto;
+      gap:6px;
+    }
+
+    .mapActions{
+      display:grid;
+      grid-template-columns:1fr 1fr 1.3fr;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .mapActions .drawAction{
+      width:100%;
+      min-width:0;
+      min-height:58px;
+      padding:12px 10px;
+      border:2px solid;
+      border-radius:12px;
+      font-size:17px;
+      font-weight:950;
+      white-space:normal;
+      text-transform:uppercase;
+      box-shadow:0 4px 12px rgba(0,0,0,.24);
+    }
+
+    #drawBtn{
+      background:#7dd3fc;
+      border-color:#bae6fd;
+      color:#082f49;
+    }
+
+    #drawBtn.active{
+      background:#38bdf8;
+      border-color:#fff;
+      box-shadow:inset 0 0 0 2px #075985,0 4px 12px rgba(0,0,0,.24);
+    }
+
+    #clearProfilesBtn{
+      background:#fda4af;
+      border-color:#fecdd3;
+      color:#4c0519;
+    }
+
+    #finishDrawBtn{
+      background:#facc15;
+      border-color:#fef08a;
+      color:#422006;
+    }
+
+    #finishDrawBtn:disabled{
+      background:#51431f;
+      border-color:#c7a94c;
+      color:#fef3c7;
+    }
+
+    .mapActions .drawAction:disabled{
+      cursor:default;
+      opacity:1;
+      filter:none;
+    }
+
+    .mapActions .drawAction:focus-visible{
+      outline:3px solid #fff;
+      outline-offset:3px;
+    }
+
+    .mapControl .drawPrompt{
+      position:static;
+      inset:auto;
+      z-index:auto;
+      transform:none;
+      width:100%;
+      min-height:0;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:10px;
+      margin-top:10px;
+      padding:10px;
+      box-shadow:none;
+    }
+
+    .mapControl .drawPrompt[hidden]{display:none}
+    .mapControl .drawPromptActions{display:flex;width:auto}
+
+    @media (max-width:430px){
+      .mapActions{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #finishDrawBtn{grid-column:1 / -1}
+    }
   </style>
 </head>
 <body>
   <div id="map" aria-label="Roads at Risk map"></div>
-  <div class="drawPrompt" id="drawPrompt" role="status" aria-live="polite" hidden>
-    <span id="drawPromptText">Tap the map to choose the first point.</span>
-    <div class="drawPromptActions">
-      <button id="finishDrawBtn" type="button" hidden>Finish line</button>
-      <button id="cancelDrawBtn" class="secondary" type="button">Cancel</button>
-    </div>
-  </div>
-
   <div class="shell" id="shell">
     <header class="titleBar">
       <div class="brandText">
@@ -3996,12 +4107,24 @@
           <button class="paneHelpBtn" type="button" data-help-key="map" aria-label="Explain the map pane" title="Explain the map pane">?</button>
         </div>
       </div>
+      <div class="mapActions" role="group" aria-label="Draw and clear road profiles">
+        <button id="drawBtn" class="drawAction" type="button" aria-pressed="false">Draw</button>
+        <button id="clearProfilesBtn" class="drawAction" type="button" aria-label="Clear all profiles">Clear</button>
+        <button id="finishDrawBtn" class="drawAction" type="button" disabled title="Add at least two points to finish a line.">Finish Line</button>
+      </div>
       <div class="mapModes" aria-label="Basemap">
-        <button data-basemap="current" class="active" type="button">Light</button>
-        <button data-basemap="satellite" class="secondary" type="button">Aerial</button>
-        <button data-basemap="terrain" class="secondary" type="button">Relief</button>
-        <button data-basemap="osm" class="secondary" type="button">Streets</button>
-        <button data-basemap="dark" class="secondary" type="button">Dark</button>
+        <button data-basemap="satellite" class="active" type="button" aria-pressed="true">Aerial</button>
+        <button data-basemap="osm" class="secondary" type="button" aria-pressed="false">Streets</button>
+      </div>
+      <div class="roadControls">
+        <label><input id="snapRoads" type="checkbox" checked aria-describedby="roadStatus">Snap to roads</label>
+      </div>
+      <div id="roadStatus" class="roadStatus" role="status">Loading road centerlines…</div>
+      <div class="drawPrompt" id="drawPrompt" role="status" aria-live="polite" hidden>
+        <span id="drawPromptText">Tap the map to choose the first point.</span>
+        <div class="drawPromptActions">
+          <button id="cancelDrawBtn" class="secondary" type="button">Cancel</button>
+        </div>
       </div>
     </section>
 
@@ -4022,8 +4145,6 @@
             </span>
           </div>
           <div class="paneActions">
-            <button id="drawBtn" class="drawAction" type="button">Draw</button>
-            <button id="clearProfilesBtn" class="drawAction secondary" type="button" aria-label="Clear all profiles">Clear</button>
             <button class="paneHelpBtn" type="button" data-help-key="profile" aria-label="Explain the road profile pane" title="Explain the road profile pane">?</button>
             <button class="expandBtn secondary" type="button" data-expand-pane="crossSectionPane" aria-controls="crossSectionPane" aria-expanded="false" aria-label="Expand cross section" title="Expand cross section">+</button>
           </div>
@@ -4097,11 +4218,6 @@
         </div>
 
         <aside class="floodPane floodCharts">
-          <div class="scenarioRow" aria-label="Projection scenario">
-            <button data-scenario="low" class="secondary" type="button">Low</button>
-            <button data-scenario="intermediate" class="active" type="button">Intermediate</button>
-            <button data-scenario="high" class="secondary" type="button">High</button>
-          </div>
           <div class="outlookChartsGrid">
             <section class="outlookChartCard observedOutlookCard" aria-labelledby="observedOutlookTitle">
               <div class="outlookChartHeader">
@@ -4113,6 +4229,11 @@
               </div>
               <div class="tinyChartWrap outlookChartWrap observedChartWrap"><canvas id="observedAnnualChart"></canvas></div>
             </section>
+            <div class="scenarioRow" aria-label="Projection scenario">
+              <button data-scenario="low" class="secondary" type="button">Low</button>
+              <button data-scenario="intermediate" class="active" type="button">Intermediate</button>
+              <button data-scenario="high" class="secondary" type="button">High</button>
+            </div>
             <section class="outlookChartCard projectedOutlookCard" id="projectedOutlookCard" aria-labelledby="projectedOutlookTitle">
               <div class="outlookChartHeader">
                 <div>
@@ -4204,6 +4325,8 @@
 
   <script type="module">
     import * as GeoTIFF from "https://cdn.jsdelivr.net/npm/geotiff@2.1.3/+esm";
+    import { buildRoadNetwork } from "./road-centerlines.mjs?v=topology-2";
+    import { municipalRoads } from "./municipal-roads.mjs?v=boundary-index-2";
 
     const FT_PER_M = 3.280839895;
     const DEM_URL = "north_wildwood_dem_5ft_cog.tif";
@@ -4222,6 +4345,13 @@
       boundsMerc:null,
       drawMode:false,
       pendingPoints:[],
+      roadNetwork:null,
+      roadLayer:null,
+      snapPreview:null,
+      drawingRoadSnapped:false,
+      pendingRoadRoute:null,
+      activeRoadSnapped:false,
+      activeVertexDistances:[],
       markers:[],
       line:null,
       riskLine:null,
@@ -4247,7 +4377,7 @@
       datum:"navd88",
       profileXZoom:null,
       profileYZoom:null,
-      activeBasemap:"current",
+      activeBasemap:"satellite",
       projectionScenario:"intermediate"
     };
 
@@ -4272,30 +4402,18 @@
       }
     };
 
-    const map = L.map("map", { zoomControl:true, preferCanvas:true });
+    const map = L.map("map", { zoomControl:true, preferCanvas:true, maxZoom:21 });
     const basemaps = {
-      current:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-        maxZoom:16,
-        attribution:"Tiles &copy; Esri"
-      }),
       satellite:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-        maxZoom:20,
-        attribution:"Tiles &copy; Esri"
-      }),
-      terrain:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-        maxZoom:20,
+        maxZoom:21, maxNativeZoom:19,
         attribution:"Tiles &copy; Esri"
       }),
       osm:L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom:19,
+        maxZoom:21, maxNativeZoom:19,
         attribution:"&copy; OpenStreetMap contributors"
-      }),
-      dark:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-        maxZoom:16,
-        attribution:"Tiles &copy; Esri"
       })
     };
-    basemaps.current.addTo(map);
+    basemaps.satellite.addTo(map);
 
     const boundaryLayer = L.geoJSON(null, {
       style:{
@@ -4313,6 +4431,118 @@
     state.savedLineLayers = new Map();
 
     function $(id){ return document.getElementById(id); }
+    function roadSnapTolerance(){
+      // A usable pointer target at town scale, still bounded to nearby roads.
+      const center = map.getCenter();
+      const pixel = map.latLngToContainerPoint(center);
+      return Math.min(50, Math.max(5, map.distance(center, map.containerPointToLatLng(pixel.add([22,0])))));
+    }
+
+    function nearestRoadPoint(point){
+      return state.roadNetwork?.nearest([point.lng,point.lat],roadSnapTolerance());
+    }
+
+    function traceRoadPoints(points){
+      const route = state.roadNetwork?.route(points.map(p => [p.lng,p.lat]), roadSnapTolerance());
+      if(!route) return null;
+      const path = route.coordinates.map(p => L.latLng(p[1],p[0]));
+      const distances = polylineVertexDistances(path);
+      return {path, points:route.waypoints.map(p => L.latLng(p[1],p[0])),
+        vertexDistances:route.waypointIndices.map(i => distances[i])};
+    }
+
+    function updateRoadOverlay(){
+      if(!state.roadLayer) return;
+      const visible = $("snapRoads").checked;
+      state.roadLayer.setStyle({weight:map.getZoom() >= 16 ? 3 : 1.5});
+      if(visible) state.roadLayer.addTo(map);
+      else map.removeLayer(state.roadLayer);
+    }
+
+    async function loadRoadCenterlines(){
+      try{
+        const [source,boundary] = await Promise.all(["north_wildwood_road_centerlines.geojson",BOUNDARY_URL].map(async url => {
+          const response = await fetch(url);
+          if(!response.ok) throw new Error(`Road boundary/data HTTP ${response.status}`);
+          return response.json();
+        }));
+        const {roads:data,contains} = municipalRoads(source,boundary);
+        state.roadNetwork = buildRoadNetwork(data,{contains});
+        map.createPane("roadCenterlines");
+        map.getPane("roadCenterlines").style.zIndex = 410;
+        map.getPane("roadCenterlines").style.pointerEvents = "none";
+        state.roadLayer = L.geoJSON(data, {pane:"roadCenterlines", interactive:false,
+          style:{color:"#f59e0b",weight:2,opacity:.8,dashArray:"4 5"},
+          attribution:'Road centerlines: <a href="https://www.arcgis.com/home/item.html?id=f8cca09665b448709b6073b4ccb25c59">NJOGIS</a>'});
+        updateRoadOverlay();
+        setText("roadStatus", $("snapRoads").checked
+          ? ""
+          : "Freehand mode. Draw or drag points without road snapping.");
+      }catch(error){
+        console.warn("Road centerlines unavailable", error);
+        setText("roadStatus", "Centerlines unavailable. Reload to retry, or uncheck Snap to roads for freehand.");
+      }
+    }
+
+    $("snapRoads").addEventListener("change", () => {
+      const toggle = $("snapRoads");
+      let notice = "";
+      if(state.drawMode){
+        let route = null;
+        if(toggle.checked && !state.roadNetwork){
+          toggle.checked = false;
+          notice = "Roads are unavailable or loading. Continue freehand, or wait and try again.";
+        }else if(toggle.checked && state.pendingPoints.length){
+          route = traceRoadPoints(state.pendingPoints);
+          if(!route || (state.pendingPoints.length >= 2 && route.path.length < 2)
+            || route.points.some((point, index) => index > 0 && map.distance(route.points[index - 1], point) < .1)){
+            toggle.checked = false;
+            route = null;
+            notice = "These points cannot connect along roads. Finish or clear this line before turning snapping on.";
+          }
+        }
+        state.drawingRoadSnapped = toggle.checked;
+        state.pendingRoadRoute = route;
+        if(route){
+          state.pendingPoints = route.points;
+          state.pendingMarkers.forEach((marker, index) => marker.setLatLng(route.points[index]));
+        }
+        if(state.pendingLine) state.pendingLine.setLatLngs(route?.path || state.pendingPoints);
+        const instruction = state.pendingPoints.length >= 2
+          ? "Add another point, or press Finish Line."
+          : state.pendingPoints.length ? "Add the next point." : "Tap the map to choose the first point.";
+        setText("drawPromptText", `${toggle.checked ? "Snap to roads on." : "Freehand mode."} ${instruction}`);
+      }
+      updateRoadOverlay();
+      clearSnapPreview();
+      setText("roadStatus", notice || (toggle.checked
+        ? (state.roadNetwork ? "" : "Centerlines unavailable or loading. Uncheck for freehand.")
+        : "Freehand mode. Draw or drag points without road snapping."));
+    });
+    map.on("zoomend", updateRoadOverlay);
+    function clearSnapPreview(){
+      if(state.snapPreview) map.removeLayer(state.snapPreview);
+      state.snapPreview = null;
+    }
+    function showSnapPreview(point){
+      const snap = nearestRoadPoint(point);
+      if(!snap){clearSnapPreview();return;}
+      const location = L.latLng(snap.coordinate[1],snap.coordinate[0]);
+      if(!state.snapPreview){
+        state.snapPreview = L.circleMarker(location, {radius:7,color:"#fff",weight:2,
+          fillColor:"#f59e0b",fillOpacity:1,interactive:false,pane:"roadCenterlines"}).addTo(map);
+      }else state.snapPreview.setLatLng(location);
+      const label = document.createElement("span");
+      label.textContent = `Snap: ${snap.edge.name}`;
+      state.snapPreview.unbindTooltip().bindTooltip(label,{permanent:true,direction:"top",offset:[0,-8]}).openTooltip();
+    }
+    map.on("mousemove", event => {
+      if(state.drawMode && state.drawingRoadSnapped) showSnapPreview(event.latlng);
+    });
+    map.on("mouseout", clearSnapPreview);
+    new ResizeObserver(entries => {
+      $("shell").style.setProperty("--actual-map-control-h", `${entries[0].target.getBoundingClientRect().height}px`);
+    }).observe(document.querySelector(".mapControl"));
     function setText(id, text){ const el = $(id); if(el) el.textContent = text; }
     function fmtFt(v, digits=1){ return Number.isFinite(v) ? `${v.toFixed(digits)} ft` : "-"; }
     function fmtLen(v){ return Number.isFinite(v) ? v >= 5280 ? `${(v/5280).toFixed(2)} mi` : `${Math.round(v)} ft` : "-"; }
@@ -4442,8 +4672,7 @@
 
     function updateHillshadeOpacity(){
       if(!state.hillshadeOverlay) return;
-      const reliefMode = state.activeBasemap === "terrain";
-      state.hillshadeOverlay.setOpacity(reliefMode ? .58 : .38);
+      state.hillshadeOverlay.setOpacity(.38);
     }
 
     function togglePaneExpansion(paneId){
@@ -4543,12 +4772,12 @@
       map:{
         title:"Map",
         tourStep:1,
-        body:`<p>Choose the background that makes the road easiest to recognize. <strong>Light</strong> keeps the interface quiet, <strong>Aerial</strong> shows real-world features, <strong>Relief</strong> emphasizes terrain, <strong>Streets</strong> favors labels, and <strong>Dark</strong> reduces glare.</p><p>The red outline is the town boundary. The shaded elevation surface and every road-profile calculation stay the same when you change basemaps—the buttons only change the visual reference underneath.</p>`
+        body:`<p>The large buttons at the top of this box control your line: <strong>Draw</strong> starts it, <strong>Finish Line</strong> completes it after at least two points, and <strong>Clear</strong> removes the current profiles.</p><p>Use the map's +/− controls, scroll or pinch to zoom. <strong>Aerial</strong> or <strong>Streets</strong> provide finer detail. Enlargement does not improve the source resolution.</p><p><strong>Snap to roads</strong> shows dashed orange NJOGIS centerlines and works when drawing or dragging numbered points. Solid colored lines are profiles; the red outline is the town boundary. Changing backgrounds never changes the source terrain data or profile calculations.</p>`
       },
       profile:{
         title:"Road Profile",
         tourStep:2,
-        body:`<p>Press <strong>Draw</strong> and click along the road. Every click adds a numbered vertex—<strong>1, 2, 3, 4</strong>, and so on—so one profile can bend through as many points as needed. Press <strong>Finish line</strong> when the route is complete; the same numbers appear on the map and graph.</p><p>Draw again to retain the earlier profile and add another comparison line. Drag any vertex on the newest line to refine it. The summary and pink exposure layer describe that active line.</p>`
+        body:`<p>With <strong>Snap to roads</strong> on, press <strong>Draw</strong> and tap near a road. The profile follows the shortest connected centerline between numbered points, including curves. Add points to choose your route, check the highlighted path, then press <strong>Finish line</strong>. Uncheck snapping for a freehand cross section.</p><p>Draw again to retain the earlier profile. Drag a numbered point on the newest line to refine it; snapped points must stay near connected roads. These are bare-earth elevation profiles, not safe-driving directions or surveyed bridge-deck heights.</p>`
       },
       outlook:{
         title:"Flood Outlook",
@@ -4571,12 +4800,12 @@
       {
         title:"Pick the clearest map",
         target:".mapControl",
-        body:`<p>Use <strong>Light</strong> for a clean working map, <strong>Aerial</strong> for recognizable buildings and pavement, <strong>Relief</strong> for terrain, <strong>Streets</strong> for labels, or <strong>Dark</strong> for low-glare viewing.</p><p>Changing the basemap never changes the elevation data, town boundary, profile, or risk result. It only changes what sits underneath your analysis.</p>`
+        body:`<p>Use <strong>Aerial</strong> for recognizable buildings and pavement, or <strong>Streets</strong> for road names and labels.</p><p>Changing the basemap never changes the elevation data, town boundary, profile, or risk result. It only changes what sits underneath your analysis.</p>`
       },
       {
         title:"Draw the road you care about",
         target:"#drawBtn",
-        body:`<p>Press <strong>Draw</strong>, then click each turn along the road. The vertices are numbered in order and those same numbers label the map and graph. Add as many points as the route needs, then press <strong>Finish line</strong>.</p><p>Draw again to compare another road without losing the first. Every vertex on the newest line remains editable. A chart gap means the route left the available elevation surface, not that elevation fell to zero.</p>`
+        body:`<p>Press <strong>Draw</strong> in the top Map box, then click each turn along the road. The vertices are numbered in order and those same numbers label the map and graph. Add as many points as the route needs, then press the yellow <strong>Finish Line</strong> button in that same box.</p><p>Draw again to compare another road without losing the first. Every vertex on the newest line remains editable. A chart gap means the route left the available elevation surface, not that elevation fell to zero.</p>`
       },
       {
         title:"Read the three headline numbers",
@@ -4904,7 +5133,7 @@
     }
 
     function setBasemap(id){
-      const next = basemaps[id] ? id : "current";
+      const next = basemaps[id] ? id : "satellite";
       if(next === state.activeBasemap && map.hasLayer(basemaps[next])) return;
       Object.entries(basemaps).forEach(([key, layer]) => {
         if(key !== next && map.hasLayer(layer)) map.removeLayer(layer);
@@ -4913,6 +5142,7 @@
       state.activeBasemap = next;
       document.querySelectorAll("[data-basemap]").forEach(button => {
         const active = button.dataset.basemap === next;
+        button.setAttribute("aria-pressed", String(active));
         button.classList.toggle("active", active);
         button.classList.toggle("secondary", !active);
       });
@@ -5508,7 +5738,7 @@
       const activeSection = profile.length ? {
         id:"active",
         vertexLabels:activeLabels,
-        vertexDistances:polylineVertexDistances(activePoints),
+        vertexDistances:state.activeVertexDistances,
         color:state.activeSectionColor,
         profile
       } : null;
@@ -5994,11 +6224,13 @@
     const SECTION_COLORS = ["#22d3ee","#a78bfa","#fbbf24","#34d399","#f472b6","#fb923c","#60a5fa","#e879f9"];
 
     function removePendingDrawing(){
+      clearSnapPreview();
       state.pendingMarkers.forEach(marker => map.removeLayer(marker));
       state.pendingMarkers = [];
       if(state.pendingLine) map.removeLayer(state.pendingLine);
       state.pendingLine = null;
       state.pendingPoints = [];
+      state.pendingRoadRoute = null;
     }
 
     function removeActiveSection(){
@@ -6012,6 +6244,8 @@
       state.profile = [];
       state.activeSavedLineId = null;
       state.activeVertexLabels = [];
+      state.activeVertexDistances = [];
+      state.activeRoadSnapped = false;
       resetInspection();
     }
 
@@ -6024,7 +6258,7 @@
           opacity:.82,
           lineCap:"round"
         }).addTo(comparisonLayerGroup);
-        section.points.forEach((point, index) => {
+        (section.controlPoints || section.points).forEach((point, index) => {
           const label = section.vertexLabels[index];
           L.marker(point, {
             icon:markerIcon(label, section.color),
@@ -6042,7 +6276,8 @@
       state.comparisonSections.push({
         id:`drawn-${labels[0]}-${labels[labels.length - 1]}`,
         vertexLabels:labels,
-        vertexDistances:polylineVertexDistances(pts),
+        vertexDistances:state.activeVertexDistances.slice(),
+        controlPoints:state.markers.map(marker => marker.getLatLng()),
         color:state.activeSectionColor,
         points:pts.map(point => L.latLng(point.lat, point.lng)),
         profile:state.profile.slice()
@@ -6072,7 +6307,7 @@
       });
     }
 
-    function drawSection(pointsOrA, b=null, fit=false, savedLineId=null, append=false){
+    function drawSection(pointsOrA, b=null, fit=false, savedLineId=null, append=false, options={}){
       const points = (Array.isArray(pointsOrA) ? pointsOrA : [pointsOrA, b])
         .filter(Boolean)
         .map(point => L.latLng(point.lat, point.lng));
@@ -6084,6 +6319,9 @@
         clearSection();
       }
       state.activeSavedLineId = savedLineId;
+      const path = options.path || points;
+      state.activeRoadSnapped = !!options.roadSnapped;
+      state.activeVertexDistances = options.vertexDistances || polylineVertexDistances(points);
       const startLabel = state.nextEndpointNumber;
       state.activeVertexLabels = points.map((_, index) => startLabel + index);
       state.nextEndpointNumber += points.length;
@@ -6095,7 +6333,7 @@
         zIndexOffset:2000,
         title:`Section vertex ${state.activeVertexLabels[index]}`
       }).addTo(map));
-      state.line = L.polyline(points, {
+      state.line = L.polyline(path, {
         color:state.activeSectionColor,
         weight:5,
         opacity:.95,
@@ -6106,22 +6344,65 @@
         if(idx !== null) selectProfileIndex(idx, true, true);
       });
       for(const marker of state.markers){
+        let previousPosition = marker.getLatLng();
+        marker.on("dragstart", () => { previousPosition = marker.getLatLng(); });
         marker.on("click", event => {
           if(event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
           const idx = nearestProfileIndex(marker.getLatLng());
           if(idx !== null) selectProfileIndex(idx, true, true);
         });
         marker.on("drag", () => {
+          if($("snapRoads").checked){
+            showSnapPreview(marker.getLatLng());
+            return;
+          }
           const pts = state.markers.map(m => m.getLatLng());
           state.line.setLatLngs(pts);
         });
         marker.on("dragend", () => {
+          clearSnapPreview();
           const pts = state.markers.map(m => m.getLatLng());
-          runProfile(pts);
+          if($("snapRoads").checked){
+            const snap = nearestRoadPoint(marker.getLatLng());
+            if(!snap){
+              marker.setLatLng(previousPosition);
+              setText("roadStatus", "No municipal centerline here. Point kept in place; move inside the town boundary, near a dashed orange road.");
+              return;
+            }
+            const snappedPoint = L.latLng(snap.coordinate[1],snap.coordinate[0]);
+            pts[state.markers.indexOf(marker)] = snappedPoint;
+            const route = traceRoadPoints(pts);
+            if(!route || route.path.length < 2){
+              if(state.activeRoadSnapped || (route && route.path.length < 2)){
+                marker.setLatLng(previousPosition);
+                setText("roadStatus", "No connected route to that point. Previous road profile kept.");
+                return;
+              }
+              // Snap an existing freehand endpoint independently. Do not claim
+              // the entire profile follows roads until all controls can route.
+              marker.setLatLng(snappedPoint);
+              state.line.setLatLngs(pts);
+              state.activeVertexDistances = polylineVertexDistances(pts);
+              runProfile(pts);
+              setText("roadStatus", `Point snapped to ${snap.edge.name}. Line remains freehand until the other points are on connected roads.`);
+              return;
+            }
+            state.activeRoadSnapped = true;
+            state.markers.forEach((m,i) => m.setLatLng(route.points[i]));
+            state.line.setLatLngs(route.path);
+            state.activeVertexDistances = route.vertexDistances;
+            runProfile(route.path);
+            setText("roadStatus", "Profile follows road centerlines. Add points to choose a different route.");
+          }else{
+            state.activeRoadSnapped = false;
+            state.activeVertexDistances = polylineVertexDistances(pts);
+            state.line.setLatLngs(pts);
+            runProfile(pts);
+          }
         });
       }
-      if(fit) map.fitBounds(L.latLngBounds(points).pad(.35));
-      runProfile(points);
+      if(fit) map.fitBounds(L.latLngBounds(path).pad(.35));
+      runProfile(path);
     }
 
     function runProfile(points){
@@ -6140,25 +6421,36 @@
     }
 
     function setDrawMode(active){
+      if(active && $("snapRoads").checked && !state.roadNetwork){
+        setText("roadStatus", "Centerlines unavailable or loading. Wait, or uncheck Snap to roads for freehand.");
+        return;
+      }
       state.drawMode = active;
+      state.drawingRoadSnapped = active && $("snapRoads").checked;
       removePendingDrawing();
       $("drawBtn").classList.toggle("active", active);
-      $("drawBtn").textContent = active ? "Add points" : "Draw";
+      $("drawBtn").setAttribute("aria-pressed", String(active));
+      $("drawBtn").disabled = active;
       map.getContainer().style.cursor = active ? "crosshair" : "";
       const prompt = $("drawPrompt");
       if(prompt){
         prompt.hidden = !active;
-        setText("drawPromptText", "Tap the map to choose the first point.");
+        setText("drawPromptText", state.drawingRoadSnapped ? "Tap near a road centerline. Zoom in for precision." : "Freehand: tap the map to choose the first point.");
       }
       const finishButton = $("finishDrawBtn");
-      if(finishButton) finishButton.hidden = true;
+      if(finishButton){
+        finishButton.disabled = true;
+        finishButton.title = "Add at least two points to finish a line.";
+      }
     }
 
     function finishPendingLine(){
       if(!state.drawMode || state.pendingPoints.length < 2) return;
       const points = state.pendingPoints.map(point => L.latLng(point.lat, point.lng));
+      const route = state.pendingRoadRoute;
+      const options = route ? {path:route.path, vertexDistances:route.vertexDistances, roadSnapped:true} : {};
       setDrawMode(false);
-      drawSection(points, null, false, null, true);
+      drawSection(points, null, false, null, true, options);
       if(window.matchMedia("(max-width: 1180px)").matches){
         window.setTimeout(() => $("crossSectionPane").scrollIntoView({ behavior:"smooth", block:"start" }), 120);
       }
@@ -6365,7 +6657,6 @@
     }
 
     function currentLineLatLngs(){
-      if(state.markers.length >= 2) return state.markers.map(marker => marker.getLatLng());
       const linePoints = state.line?.getLatLngs?.();
       return Array.isArray(linePoints) && linePoints.length >= 2 ? linePoints.slice() : null;
     }
@@ -6477,6 +6768,9 @@
         a:{ lat:a.lat, lng:a.lng },
         b:{ lat:b.lat, lng:b.lng },
         points:pts.map(point => ({ lat:point.lat, lng:point.lng })),
+        controlPoints:state.markers.map(marker => ({lat:marker.getLatLng().lat, lng:marker.getLatLng().lng})),
+        roadSnapped:state.activeRoadSnapped,
+        vertexDistances:state.activeVertexDistances.slice(),
         createdAt:new Date().toISOString()
       });
       state.savedLines = state.savedLines.slice(0, 12);
@@ -6493,7 +6787,10 @@
       setThreshold(toDisplayDatum(line.thresholdFt ?? state.thresholdFt));
       const points = (line.points?.length ? line.points : [line.a, line.b])
         .map(point => L.latLng(point.lat, point.lng));
-      drawSection(points, null, true, line.id);
+      const controls = line.controlPoints?.length >= 2 ? line.controlPoints : points;
+      drawSection(controls, null, true, line.id, false, {
+        path:points, roadSnapped:line.roadSnapped, vertexDistances:line.vertexDistances
+      });
       setExportStatus(`Loaded "${line.name || "saved line"}".`);
     }
 
@@ -6614,11 +6911,9 @@
     }
 
     $("drawBtn").addEventListener("click", () => {
-      if(state.drawMode){
-        finishPendingLine();
-        return;
-      }
+      if(state.drawMode) return;
       setDrawMode(true);
+      if(!state.drawMode) return;
       if(window.matchMedia("(max-width: 1180px)").matches){
         if($("shell").classList.contains("paneExpanded")) togglePaneExpansion("crossSectionPane");
         window.setTimeout(() => $("map").scrollIntoView({ behavior:"smooth", block:"start" }), 80);
@@ -6693,17 +6988,32 @@
         if(idx !== null) selectProfileIndex(idx, true, true);
         return;
       }
-      state.pendingPoints.push(event.latlng);
+      let point = event.latlng;
+      if(state.drawingRoadSnapped){
+        const route = traceRoadPoints([...state.pendingPoints, point]);
+        if(!route || (state.pendingPoints.length && route.path.length < 2)){
+          setText("drawPromptText", "Choose a connected road inside the red municipal boundary.");
+          return;
+        }
+        point = route.points[route.points.length-1];
+        if(state.pendingPoints.length && map.distance(state.pendingPoints.at(-1),point) < .1){
+          setText("drawPromptText", "Choose a different road point, or finish this line.");
+          return;
+        }
+        state.pendingRoadRoute = route;
+      }
+      state.pendingPoints.push(point);
+      const path = state.pendingRoadRoute?.path || state.pendingPoints;
       const color = SECTION_COLORS[state.comparisonSections.length % SECTION_COLORS.length];
       const label = state.nextEndpointNumber + state.pendingPoints.length - 1;
-      state.pendingMarkers.push(L.marker(event.latlng, {
+      state.pendingMarkers.push(L.marker(point, {
         icon:markerIcon(label, color),
         interactive:false,
         title:`Section vertex ${label}`
       }).addTo(map));
       if(state.pendingPoints.length >= 2){
         if(!state.pendingLine){
-          state.pendingLine = L.polyline(state.pendingPoints, {
+          state.pendingLine = L.polyline(path, {
             color,
             weight:5,
             opacity:.88,
@@ -6711,15 +7021,15 @@
             dashArray:"8 6"
           }).addTo(map);
         }else{
-          state.pendingLine.setLatLngs(state.pendingPoints);
+          state.pendingLine.setLatLngs(path);
         }
-        $("finishDrawBtn").hidden = false;
-        $("drawBtn").textContent = "Finish line";
+        $("finishDrawBtn").disabled = false;
+        $("finishDrawBtn").title = "Finish the current line.";
         setText("chartStatus", `${state.pendingPoints.length} vertices ready`);
-        setText("drawPromptText", "Add another point, or finish this line.");
+        setText("drawPromptText", state.drawingRoadSnapped ? "Snapped to centerlines. Add another road point, or finish." : "Add another point, or finish this line.");
       }else{
         setText("chartStatus", "Choose another point");
-        setText("drawPromptText", "Add the next point along the road.");
+        setText("drawPromptText", state.drawingRoadSnapped ? "Point snapped to centerline. Add the next road point." : "Add the next point along the road.");
       }
     });
 
@@ -6734,6 +7044,7 @@
       renderChart(state.profile);
     });
     loadSavedLines();
+    loadRoadCenterlines();
     loadApp().catch(err => {
       console.error(err);
       setReady(false, "Unavailable");
