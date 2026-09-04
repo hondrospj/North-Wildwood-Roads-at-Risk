@@ -6392,7 +6392,7 @@
             state.line.setLatLngs(route.path);
             state.activeVertexDistances = route.vertexDistances;
             runProfile(route.path);
-            setText("roadStatus", "Profile follows road centerlines. Add points to choose a different route.");
+            setText("roadStatus", "");
           }else{
             state.activeRoadSnapped = false;
             state.activeVertexDistances = polylineVertexDistances(pts);
