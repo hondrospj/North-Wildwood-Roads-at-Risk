@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Roads at Risk - North Wildwood</title>
+  <title>Road Risk - North Wildwood</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2360a5fa'/%3E%3Cpath d='M14 40h36M18 30h28M24 20h18' stroke='%230b1220' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
 
   <link
@@ -4090,12 +4090,12 @@
   </style>
 </head>
 <body>
-  <div id="map" aria-label="Roads at Risk map"></div>
+  <div id="map" aria-label="Road Risk map"></div>
   <div class="shell" id="shell">
     <header class="titleBar">
       <div class="brandText">
         <p class="eyebrow">North Wildwood</p>
-        <h1>Roads at Risk</h1>
+        <h1>Road Risk</h1>
       </div>
     </header>
 
@@ -4128,8 +4128,8 @@
       </div>
     </section>
 
-    <aside class="rightStack" aria-label="Roads at Risk tools">
-      <nav class="mobileToolNav" aria-label="Roads at Risk sections">
+    <aside class="rightStack" aria-label="Road Risk tools">
+      <nav class="mobileToolNav" aria-label="Road Risk sections">
         <button type="button" data-mobile-target="crossSectionPane" aria-label="Open Road Profile" aria-current="true">Profile</button>
         <button type="button" data-mobile-target="floodHistoryPane" aria-label="Open Flood Outlook">Outlook</button>
         <button type="button" data-mobile-target="exportPane" aria-label="Open Save and Export">Export</button>
@@ -4793,7 +4793,7 @@
 
     const ROADRISK_TOUR_STEPS = [
       {
-        title:"Welcome to Roads at Risk",
+        title:"Welcome to Road Risk",
         target:".titleBar",
         body:`<p>Think of this as a quick road-elevation stress test. Draw a route, choose a water level, and the app shows where that route is low enough to be exposed.</p><p><strong>It is a planning tool, not a road-closure order or a real-time emergency forecast.</strong> Use it to find weak points, compare routes, and frame better field questions.</p>`
       },
@@ -5177,7 +5177,7 @@
     function recurrenceText(stageFt){
       const years = state.floodStats?.archive?.years || 0;
       const count = countDailyExceedances(stageFt);
-      if(!years || !state.floodStats?.dailyPeakNavd88Ft?.length) return "-";
+      if(!years || !dailyArchive().length) return "-";
       if(count <= 0) return `>${years.toFixed(1)} yr`;
       const perYear = count / years;
       if(perYear >= 1) return `~${(365.2425 / perYear).toFixed(1)} days`;
@@ -5219,13 +5219,16 @@
     }
 
     function dailyArchive(){
+      const compact = state.floodStats?.dailyPeakCompact;
+      if(Array.isArray(compact)){
+        return compact
+          .map(row => ({ date:String(row?.[0] || "").slice(0, 10), peakFt:Number(row?.[1]) / 100 }))
+          .filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.peakFt));
+      }
       const rows = state.floodStats?.dailyPeakArchive;
       if(!Array.isArray(rows)) return [];
       return rows
-        .map(row => ({
-          date:String(row.date || "").slice(0, 10),
-          peakFt:Number(row.peakNavd88Ft)
-        }))
+        .map(row => ({ date:String(row.date || "").slice(0, 10), peakFt:Number(row.peakNavd88Ft) }))
         .filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.peakFt));
     }
 
