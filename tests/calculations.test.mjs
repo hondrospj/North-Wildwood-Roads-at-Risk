@@ -39,17 +39,18 @@ test('unknown intervals retain route length and never become flooded geometry',(
 });
 test('recorded counts equal the annual bars; missing years and partial coverage are explicit',()=>{
   const c=calculations();const b=c.buildBucketStats(3.3);
-  assert.equal(c.countDailyExceedances(3.3),1401);assert.equal(b.total,1401);
+  assert.equal(c.countDailyExceedances(3.3),1377);assert.equal(b.total,1377);
   assert.equal(b.annualRows.reduce((s,r)=>s+(r.count||0),0),b.total);
   assert.equal(b.annualRows.find(r=>r.year===1930).count,null);
-  assert.deepEqual(b.annualRows.find(r=>r.year===2026),{year:2026,count:27,coverageDays:243,calendarDays:365,complete:false});
+  assert.deepEqual(b.annualRows.find(r=>r.year===2026),{year:2026,count:28,coverageDays:243,calendarDays:365,complete:false});
   assert.equal(b.annualRows.find(r=>r.year===1920).coverageDays,5);
 });
 test('caching reuses the prepared distribution without changing the existing projection model',()=>{
   const c=calculations();const cache=c.archiveData();const distribution=c.presentPeakDistribution();
   const t=performance.now();const b=c.buildBucketStats(3.3);const elapsedMs=performance.now()-t;
   assert.equal(c.archiveData(),cache);assert.equal(c.presentPeakDistribution(),distribution);
-  assert.ok(Math.abs(b.projection2100.mean-364.55713275746336)<1e-9);
+  // Independently recomputed for the repaired 29,995-day archive and existing scenario formula.
+  assert.ok(Math.abs(b.projection2100.mean-364.5764796776841)<1e-9);
   c.state.projectionScenario='high';c.buildBucketStats(4.3);
   assert.equal(c.presentPeakDistribution(),distribution);
   console.log(JSON.stringify({coldBucketMs:elapsedMs.toFixed(2),archiveDays:distribution.length}));
