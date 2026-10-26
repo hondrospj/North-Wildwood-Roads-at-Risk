@@ -6488,7 +6488,7 @@
           roadSnapped:true,
           vertexDistances:road.waypointIndices.map(index => distances[index])
         });
-        setText("roadStatus", `Initial line: ${road.name}. Drag its numbered endpoints or draw another line.`);
+        setText("roadStatus", "");
         return;
       }
       // Keep the app usable when the named road or its source cannot load.
