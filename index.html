@@ -2936,10 +2936,15 @@
       font-size:13px;
     }
 
-    .exportStatus,
-    .modelNote{
-      display:none;
+    .modelNote{ display:none; }
+    .exportStatus, .calcNote{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.4;
+      margin:6px 0 0;
     }
+    .calcNote:empty{ display:none; }
 
     .leaflet-control-zoom a{
       width:40px !important;
@@ -4157,7 +4162,7 @@
               <div class="v" id="minElev">-</div>
             </div>
             <div class="stat">
-              <div class="k">Flooded</div>
+              <div class="k">Below stage</div>
               <div class="v" id="exposedPct">-</div>
             </div>
             <div class="stat">
@@ -4165,6 +4170,7 @@
               <div class="v" id="profileLen">-</div>
             </div>
           </section>
+          <p id="profileCoverage" class="calcNote" role="status"></p>
 
           <section class="pointStrip" aria-label="Selected point">
             <div class="pointHero">
@@ -4177,7 +4183,7 @@
             <div class="metricRows">
               <div class="metricRow"><div class="k">Clearance</div><div class="v" id="pointClearance">-</div></div>
               <div class="metricRow"><div class="k">Archive</div><div class="v" id="pointExceedances">-</div></div>
-              <div class="metricRow"><div class="k">Return</div><div class="v" id="pointReturn">-</div></div>
+              <div class="metricRow"><div class="k">Avg. spacing</div><div class="v" id="pointReturn">-</div></div>
             </div>
           </section>
         </div>
@@ -4223,7 +4229,8 @@
               <div class="outlookChartHeader">
                 <div>
                   <h2 id="observedOutlookTitle">Observed History</h2>
-                  <p>Measured Flood Days by Year</p>
+                  <p>Recorded Flood Days by Year</p>
+                  <p class="calcNote">Gaps: no observations. Gold bars: partial years.</p>
                 </div>
                 <div class="chartKey outlookChartKey" id="observedFloodKey" aria-label="Observed history key"></div>
               </div>
@@ -4245,7 +4252,7 @@
               <div class="tinyChartWrap outlookChartWrap projectedChartWrap"><canvas id="projectedAnnualChart"></canvas></div>
             </section>
           </div>
-          <p class="modelNote" id="projectionNote"></p>
+          <p class="calcNote" id="projectionNote"></p>
         </aside>
       </section>
 
@@ -4327,6 +4334,8 @@
     import * as GeoTIFF from "https://cdn.jsdelivr.net/npm/geotiff@2.1.3/+esm";
     import { buildRoadNetwork } from "./road-centerlines.mjs?v=topology-2";
     import { municipalRoads } from "./municipal-roads.mjs?v=boundary-index-2";
+    import { selectDefaultRoadProfile } from "./default-road.mjs?v=16th-avenue-1";
+    import { configuredMllwOffset, analyzeProfile } from "./profile-math.mjs?v=calculation-fixes-1";
 
     const FT_PER_M = 3.280839895;
     const DEM_URL = "north_wildwood_dem_5ft_cog.tif";
@@ -4346,6 +4355,7 @@
       drawMode:false,
       pendingPoints:[],
       roadNetwork:null,
+      defaultRoadProfile:null,
       roadLayer:null,
       snapPreview:null,
       drawingRoadSnapped:false,
@@ -4468,6 +4478,7 @@
         }));
         const {roads:data,contains} = municipalRoads(source,boundary);
         state.roadNetwork = buildRoadNetwork(data,{contains});
+        state.defaultRoadProfile = selectDefaultRoadProfile(data,{contains});
         map.createPane("roadCenterlines");
         map.getPane("roadCenterlines").style.zIndex = 410;
         map.getPane("roadCenterlines").style.pointerEvents = "none";
@@ -4480,7 +4491,8 @@
           : "Freehand mode. Draw or drag points without road snapping.");
       }catch(error){
         console.warn("Road centerlines unavailable", error);
-        setText("roadStatus", "Centerlines unavailable. Reload to retry, or uncheck Snap to roads for freehand.");
+        $("snapRoads").checked = false;
+        setText("roadStatus", "Road centerlines unavailable. Freehand mode is available; reload to retry roads.");
       }
     }
 
@@ -4555,15 +4567,13 @@
     function activeDatum(){ return state.datum === "mllw" ? "mllw" : "navd88"; }
     function datumLabel(){ return activeDatum().toUpperCase(); }
     function datumOffsetFt(){
-      return activeDatum() === "mllw"
-        ? Number(state.floodStats?.datum?.mllwOffsetFromNavd88Ft ?? .45)
-        : 0;
+      return activeDatum() === "mllw" ? configuredMllwOffset(state.floodStats) : 0;
     }
     function toDisplayDatum(value){
       return Number.isFinite(value) ? value + datumOffsetFt() : value;
     }
     function fromDisplayDatum(value){
-      const n = Number(value);
+      const n = typeof value === "string" && !value.trim() ? NaN : Number(value);
       return Number.isFinite(n) ? n - datumOffsetFt() : n;
     }
     function fmtDatumFt(navd88Ft, digits=2){
@@ -5171,17 +5181,16 @@
     }
 
     function countDailyExceedances(stageFt){
-      return empiricalExceedance(stageFt).observedExceedances;
+      return empiricalExceedance(stageFt, rawPeakDistribution()).observedExceedances;
     }
 
     function recurrenceText(stageFt){
-      const years = state.floodStats?.archive?.years || 0;
+      const days = dailyArchive().length;
       const count = countDailyExceedances(stageFt);
-      if(!years || !dailyArchive().length) return "-";
-      if(count <= 0) return `>${years.toFixed(1)} yr`;
-      const perYear = count / years;
-      if(perYear >= 1) return `~${(365.2425 / perYear).toFixed(1)} days`;
-      return `~${(years / count).toFixed(1)} yr`;
+      if(!days) return "-";
+      if(count <= 0) return "Not observed";
+      const spacing = days / count;
+      return spacing < 365.2425 ? `~${spacing.toFixed(1)} days` : `~${(spacing / 365.2425).toFixed(1)} yr`;
     }
 
     function topEventText(stageFt){
@@ -5218,41 +5227,40 @@
       return Number((Math.round(stageFt * 10) / 10).toFixed(1));
     }
 
-    function dailyArchive(){
-      const compact = state.floodStats?.dailyPeakCompact;
-      if(Array.isArray(compact)){
-        return compact
-          .map(row => ({ date:String(row?.[0] || "").slice(0, 10), peakFt:Number(row?.[1]) / 100 }))
-          .filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.peakFt));
-      }
-      const rows = state.floodStats?.dailyPeakArchive;
-      if(!Array.isArray(rows)) return [];
-      return rows
-        .map(row => ({ date:String(row.date || "").slice(0, 10), peakFt:Number(row.peakNavd88Ft) }))
-        .filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.peakFt));
-    }
-
-    function presentRebasedArchive(){
+    function archiveData(){
+      const source = state.floodStats;
       const baseYear = projectionBaseYear();
       const trend = datumTrendFtPerYear();
-      return dailyArchive()
-        .map(row => {
-          const eventYear = decimalYear(row.date);
-          const rebaseFt = eventYear === null ? 0 : (baseYear - eventYear) * trend;
-          return {
-            ...row,
-            presentPeakFt:row.peakFt + rebaseFt,
-            rebaseFt
-          };
-        })
-        .filter(row => Number.isFinite(row.presentPeakFt));
+      const cached = state.archiveData;
+      if(cached?.source === source && cached.baseYear === baseYear && cached.trend === trend) return cached;
+      const compact = source?.dailyPeakCompact;
+      const input = Array.isArray(compact) ? compact : source?.dailyPeakArchive || [];
+      const records = input.map(row => ({
+        date:String(Array.isArray(compact) ? row?.[0] || "" : row?.date || "").slice(0, 10),
+        peakFt:Array.isArray(compact) ? Number(row?.[1]) / 100 : Number(row?.peakNavd88Ft)
+      })).filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.peakFt));
+      const rebased = records.map(row => {
+        const eventYear = decimalYear(row.date);
+        const rebaseFt = eventYear === null ? 0 : (baseYear - eventYear) * trend;
+        return {...row, presentPeakFt:row.peakFt + rebaseFt, rebaseFt};
+      }).filter(row => Number.isFinite(row.presentPeakFt));
+      const coverage = new Map();
+      for(const row of records){
+        const year = Number(row.date.slice(0, 4));
+        coverage.set(year, (coverage.get(year) || 0) + 1);
+      }
+      state.archiveData = {source, baseYear, trend, records, rebased, coverage,
+        rawSorted:records.map(row => row.peakFt).sort((a,b) => a-b),
+        presentSorted:rebased.map(row => row.presentPeakFt).sort((a,b) => a-b)};
+      return state.archiveData;
     }
 
-    function presentPeakDistribution(){
-      return presentRebasedArchive()
-        .map(row => row.presentPeakFt)
-        .sort((a, b) => a - b);
-    }
+    function dailyArchive(){ return archiveData().records; }
+    function rawPeakDistribution(){ return archiveData().rawSorted; }
+
+    function presentRebasedArchive(){ return archiveData().rebased; }
+
+    function presentPeakDistribution(){ return archiveData().presentSorted; }
 
     function empiricalExceedance(stageFt, sortedValues=presentPeakDistribution(), smooth=false){
       const n = sortedValues.length;
@@ -5362,7 +5370,12 @@
       const lastYear = years[years.length - 1];
       const projection2100 = projectionForThreshold(threshold, 2100);
 
-      const annualRows = years.map(year => ({ year, count:annualMap.get(year) || 0 }));
+      const annualRows = years.map(year => {
+        const coverageDays = archiveData().coverage.get(year) || 0;
+        const calendarDays = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86400000;
+        return {year, count:coverageDays ? annualMap.get(year) || 0 : null,
+          coverageDays, calendarDays, complete:coverageDays === calendarDays};
+      });
       const futureYears = Array.from({length:2100 - baseYear}, (_, i) => baseYear + i + 1);
       const future = futureYears.map(year => projectionForThreshold(threshold, year)).filter(Boolean);
       const scenario = activeScenario();
@@ -5381,7 +5394,7 @@
         projection2100,
         presentDistribution,
         future,
-        total:presentDistribution.exceedances
+        total:annualRows.reduce((sum, row) => sum + (row.count || 0), 0)
       };
       state.floodBucketCache.set(key, stats);
       return stats;
@@ -5390,6 +5403,7 @@
     function setReady(ok, text){
       document.documentElement.dataset.demStatus = ok ? "ready" : "unavailable";
       document.documentElement.dataset.demStatusText = text || "";
+      if(!ok) setText("roadStatus", text || "Road Risk data unavailable. Reload to retry.");
     }
 
     function mercatorFromLatLng(lat, lon){
@@ -5444,7 +5458,6 @@
       const totalLengthFt = vertexDistances[vertexDistances.length - 1];
       const stepFt = Math.max(5, totalLengthFt / 2400);
       const rows = [];
-      let lastValidDistance = null;
       for(let segmentIndex=0; segmentIndex<points.length - 1; segmentIndex++){
         const a = points[segmentIndex];
         const b = points[segmentIndex + 1];
@@ -5455,12 +5468,7 @@
           const p = interpolatePoint(a, b, t);
           const elev = sampleDem(p.lat, p.lng);
           const distance = vertexDistances[segmentIndex] + segmentLengthFt * t;
-          if(Number.isFinite(elev)){
-            lastValidDistance = distance;
-            rows.push({ distanceFt:distance, elevationFt:elev, lat:p.lat, lng:p.lng });
-          }else if(lastValidDistance !== null){
-            rows.push({ distanceFt:distance, elevationFt:null, lat:p.lat, lng:p.lng });
-          }
+          rows.push({ distanceFt:distance, elevationFt:Number.isFinite(elev) ? elev : null, lat:p.lat, lng:p.lng });
         }
       }
       return rows;
@@ -5471,51 +5479,25 @@
     }
 
     function updateStats(profile){
-      const valid = profile.filter(p => Number.isFinite(p.elevationFt));
-      if(!valid.length){
-        setText("minElev", "-");
-        setText("exposedPct", "-");
-        setText("profileLen", "-");
-        setText("riskLen", "-");
-        setText("riskSummary", "No DEM samples");
-        return;
-      }
-      const min = valid.reduce((a,b) => b.elevationFt < a.elevationFt ? b : a, valid[0]);
-      const len = valid[valid.length - 1].distanceFt - valid[0].distanceFt;
-      let riskLen = 0;
-      let longestRun = 0;
-      let currentRun = 0;
-      for(let i=1; i<valid.length; i++){
-        const segment = valid[i].distanceFt - valid[i-1].distanceFt;
-        if(valid[i].elevationFt <= state.thresholdFt || valid[i-1].elevationFt <= state.thresholdFt){
-          riskLen += segment;
-          currentRun += segment;
-          longestRun = Math.max(longestRun, currentRun);
-        }else{
-          currentRun = 0;
-        }
-      }
-
-      setText("minElev", fmtDatumFt(min.elevationFt, 1));
-      setText("exposedPct", `${Math.round((riskLen / Math.max(len, 1)) * 100)}%`);
-      setText("profileLen", fmtLen(len));
-      setText("riskLen", fmtLen(riskLen));
-      setText("riskSummary", riskLen > 0 ? fmtLen(longestRun) : "None");
+      const result = analyzeProfile(profile, state.thresholdFt);
+      const hasCoverage = result.coveredLengthFt > 0;
+      const hasUnknown = result.unknownLengthFt > .01;
+      setText("minElev", fmtDatumFt(result.minElevationFt, 1));
+      setText("profileLen", profile.length > 1 ? fmtLen(result.totalLengthFt) : "-");
+      setText("exposedPct", hasCoverage
+        ? `${Math.round(result.exposedLengthFt / result.coveredLengthFt * 100)}%${hasUnknown ? "*" : ""}`
+        : "-");
+      setText("profileCoverage", hasUnknown
+        ? `* Of covered length. ${fmtLen(result.unknownLengthFt)} has no elevation data.` : "");
+      setText("riskLen", hasCoverage ? fmtLen(result.exposedLengthFt) : "-");
+      setText("riskSummary", hasCoverage
+        ? result.exposedLengthFt > 0 ? fmtLen(result.longestExposedLengthFt) : "None"
+        : "No DEM coverage");
     }
 
     function riskSegments(profile){
-      const segments = [];
-      let active = [];
-      for(const p of profile){
-        if(Number.isFinite(p.elevationFt) && p.elevationFt <= state.thresholdFt){
-          active.push([p.lat, p.lng]);
-        }else if(active.length){
-          if(active.length > 1) segments.push(active);
-          active = [];
-        }
-      }
-      if(active.length > 1) segments.push(active);
-      return segments;
+      return analyzeProfile(profile, state.thresholdFt).exposedSegments
+        .map(segment => segment.map(point => [point.lat, point.lng]));
     }
 
     function renderRiskSegments(profile){
@@ -5765,14 +5747,14 @@
         fill:section.id === "active",
         pointRadius:0,
         borderWidth:section.id === "active" ? chartFontSizes("crossSectionPane").line + 1 : chartFontSizes("crossSectionPane").line,
-        tension:.22,
+        tension:0,
         spanGaps:false
       }));
       const maxX = profileDisplayXMax(profile);
-      const riskData = profile.map(point => ({
-        x:point.distanceFt,
-        y:Number.isFinite(point.elevationFt) && point.elevationFt <= state.thresholdFt ? toDisplayDatum(point.elevationFt) : null
-      }));
+      const riskData = analyzeProfile(profile, state.thresholdFt).exposedSegments.flatMap((segment, index) => [
+        ...(index ? [{x:segment[0].distanceFt, y:null}] : []),
+        ...segment.map(point => ({x:point.distanceFt, y:toDisplayDatum(point.elevationFt)}))
+      ]);
       const thresholdValue = toDisplayDatum(state.thresholdFt);
       const thresholdData = [{ x:0, y:thresholdValue }, { x:maxX, y:thresholdValue }];
       const selectedPoint = profile[state.selectedIndex];
@@ -5795,7 +5777,7 @@
               backgroundColor:"rgba(251,113,133,.18)",
               pointRadius:0,
               borderWidth:fonts.line + 2,
-              tension:.12,
+              tension:0,
               spanGaps:false
             },
             {
@@ -5921,7 +5903,8 @@
             label:"Observed",
             data:observed,
             legendColor:"rgba(34,211,238,.82)",
-            backgroundColor:"rgba(34,211,238,.72)",
+            backgroundColor:bucketStats ? bucketStats.annualRows.map(row => row.complete
+              ? "rgba(34,211,238,.72)" : "rgba(251,191,36,.72)") : [],
             borderColor:"rgba(125,211,252,.96)",
             borderWidth:1,
             borderRadius:2
@@ -5940,7 +5923,10 @@
               callbacks:{
                 label(ctx){
                   const value = ctx.parsed?.y;
-                  return Number.isFinite(value) ? `Observed: ${fmtFlood(value,0)} Flood Days` : null;
+                  const row = bucketStats?.annualRows[ctx.dataIndex];
+                  return Number.isFinite(value)
+                    ? [`Recorded: ${fmtFlood(value,0)} flood days`, `${row?.coverageDays || 0} of ${row?.calendarDays || 365} days available`]
+                    : "No observations";
                 }
               }
             }
@@ -5987,7 +5973,7 @@
             },
             {
               label:"Uncertainty",
-              keyLabel:"Uncertainty",
+              keyLabel:"90% range",
               legendGroup:"projectedRange",
               data:high,
               legendColor:"rgba(251,191,36,.46)",
@@ -6030,7 +6016,7 @@
                   if(ctx.dataset.label === "Uncertainty"){
                     const lowValue = low[ctx.dataIndex];
                     return Number.isFinite(lowValue)
-                      ? `Uncertainty: ${fmtFlood(lowValue,0)} - ${fmtFlood(value,0)} Flood Days`
+                      ? `90% conditional count range: ${fmtFlood(lowValue,0)} - ${fmtFlood(value,0)} flood days`
                       : null;
                   }
                   return `${bucketStats?.scenarioShort || "Scenario"} Projection: ${fmtFlood(value,1)} Flood Days`;
@@ -6075,7 +6061,9 @@
       setText("floodArchiveTotal", fmtFlood(bucketStats.total, 0));
       setText("floodOutlook", bucketStats.projection2100 ? fmtFlood(bucketStats.projection2100.mean, 1) : "-");
       setText("annualFloodMeta", `${bucketStats.firstYear}-2100`);
-      setText("projectionNote", "");
+      setText("projectionNote", bucketStats.presentDistribution.observedExceedances === 0
+        ? "No events at this height in the available analog record; zero does not establish zero risk."
+        : "90% count band assumes independent days; excludes terrain and sea-level uncertainty.");
       renderAnnualFloodCharts(bucketStats);
       return bucketStats;
     }
@@ -6092,7 +6080,7 @@
 
     function pointStats(point){
       if(!point || !Number.isFinite(point.elevationFt)) return null;
-      const mllwOffset = state.floodStats?.datum?.mllwOffsetFromNavd88Ft ?? .45;
+      const mllwOffset = configuredMllwOffset(state.floodStats);
       const uncertainty = state.uncertaintyFt;
       const stageClass = classifyStage(point.elevationFt);
       const bucketStageFt = snapStageBucket(point.elevationFt);
@@ -6120,7 +6108,7 @@
         <div class="popupStats">
           <strong>${fmtDatumFt(stats.elevationFt, 2)}</strong>
           <span>${fmtLen(point.distanceFt)} along section</span>
-          <span>Recurrence: ${stats.recurrence}</span>
+          <span>Recorded flood-day spacing: ${stats.recurrence}</span>
           <span>Clearance: ${fmtSigned(stats.clearance, 2)}</span>
           <span class="tiny">${stats.risk}; +/-${stats.uncertainty.toFixed(2)} ft uncertainty</span>
         </div>
@@ -6172,6 +6160,7 @@
         state.inspectMarker.setLatLng(latLng);
       }
       state.inspectMarker.bindPopup(popupHtml(point, stats));
+      if(openPopup) state.inspectMarker.openPopup();
     }
 
     function nearestProfileIndex(latLng){
@@ -6277,7 +6266,7 @@
       if(!pts || !state.profile.length || !state.activeVertexLabels.length) return;
       const labels = state.activeVertexLabels.slice();
       state.comparisonSections.push({
-        id:`drawn-${labels[0]}-${labels[labels.length - 1]}`,
+        id:state.activeSavedLineId || `drawn-${labels[0]}-${labels[labels.length - 1]}`,
         vertexLabels:labels,
         vertexDistances:state.activeVertexDistances.slice(),
         controlPoints:state.markers.map(marker => marker.getLatLng()),
@@ -6307,6 +6296,31 @@
         html:`<div class="sectionMarker" style="--section-color:${color}">${label ? `<span class="sectionMarkerLabel">${label}</span>` : ""}</div>`,
         iconSize:[size,size],
         iconAnchor:[size / 2,size / 2]
+      });
+    }
+
+    function fitSectionBounds(path){
+      const gap = 28;
+      const mapRect = map.getContainer().getBoundingClientRect();
+      let top = gap;
+      let right = gap;
+      const overlapsMap = rect => rect && rect.width > 0 && rect.height > 0
+        && rect.right > mapRect.left && rect.left < mapRect.right
+        && rect.bottom > mapRect.top && rect.top < mapRect.bottom;
+      if(desktopWorkspaceTabs()){
+        for(const selector of [".rightStack", ".mapControl"]){
+          const rect = document.querySelector(selector)?.getBoundingClientRect();
+          if(overlapsMap(rect) && rect.left > mapRect.left){
+            right = Math.max(right, mapRect.right - rect.left + gap);
+          }
+        }
+        const brand = document.querySelector(".titleBar")?.getBoundingClientRect();
+        if(overlapsMap(brand)) top = Math.max(top, brand.bottom - mapRect.top + gap);
+      }
+      map.fitBounds(L.latLngBounds(path), {
+        paddingTopLeft:[gap, top],
+        paddingBottomRight:[right, gap],
+        animate:false
       });
     }
 
@@ -6343,6 +6357,7 @@
         lineCap:"round"
       }).addTo(map);
       state.line.on("click", event => {
+        if(state.drawMode) return;
         const idx = nearestProfileIndex(event.latlng);
         if(idx !== null) selectProfileIndex(idx, true, true);
       });
@@ -6350,6 +6365,7 @@
         let previousPosition = marker.getLatLng();
         marker.on("dragstart", () => { previousPosition = marker.getLatLng(); });
         marker.on("click", event => {
+          if(state.drawMode) return;
           if(event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
           const idx = nearestProfileIndex(marker.getLatLng());
           if(idx !== null) selectProfileIndex(idx, true, true);
@@ -6404,7 +6420,7 @@
           }
         });
       }
-      if(fit) map.fitBounds(L.latLngBounds(path).pad(.35));
+      if(fit) fitSectionBounds(path);
       runProfile(path);
     }
 
@@ -6460,14 +6476,30 @@
     }
 
     function defaultSection(){
-      // Default municipality cross-section.
+      const road = state.defaultRoadProfile;
+      if(road){
+        const path = road.coordinates.map(point => L.latLng(point[1], point[0]));
+        const points = road.waypoints.map(point => L.latLng(point[1], point[0]));
+        const distances = polylineVertexDistances(path);
+        // Two draggable endpoint controls retain the avenue's complete traced
+        // geometry. Later edits and additional profiles use the normal tools.
+        drawSection(points, null, true, null, false, {
+          path,
+          roadSnapped:true,
+          vertexDistances:road.waypointIndices.map(index => distances[index])
+        });
+        setText("roadStatus", `Initial line: ${road.name}. Drag its numbered endpoints or draw another line.`);
+        return;
+      }
+      // Keep the app usable when the named road or its source cannot load.
       drawSection(
         L.latLng(39.00307, -74.81208),
         L.latLng(39.00307, -74.79032),
-        false,
+        true,
         null,
         false
       );
+      setText("roadStatus", "16th Avenue unavailable. Showing an editable freehand sample; draw another line or reload to retry roads.");
     }
 
     function csvCell(value){
@@ -6486,14 +6518,15 @@
       const active = currentLineLatLngs();
       if(active && state.activeVertexLabels.length){
         records.push({
-          id:`drawn-${state.activeVertexLabels[0]}-${state.activeVertexLabels[state.activeVertexLabels.length - 1]}`,
-          name:`Profile ${profileNumberLabel(state.activeVertexLabels)}`,
+          id:state.activeSavedLineId || `drawn-${state.activeVertexLabels[0]}-${state.activeVertexLabels[state.activeVertexLabels.length - 1]}`,
+          name:state.savedLines.find(line => line.id === state.activeSavedLineId)?.name || `Profile ${profileNumberLabel(state.activeVertexLabels)}`,
           thresholdFt:state.thresholdFt,
           createdAt:"",
           points:active
         });
       }
-      records.push(...state.savedLines.map(line => ({
+      const exportedIds = new Set(records.map(record => record.id));
+      records.push(...state.savedLines.filter(line => !exportedIds.has(line.id)).map(line => ({
         id:line.id,
         name:line.name || "Saved line",
         thresholdFt:Number.isFinite(line.thresholdFt) ? line.thresholdFt : state.thresholdFt,
@@ -6533,9 +6566,7 @@
           type:"Feature",
           geometry:{
             type:"LineString",
-            coordinates:profile.length
-              ? profile.map(point => [point.lng, point.lat])
-              : record.points.map(point => [point.lng, point.lat])
+            coordinates:record.points.map(point => [point.lng, point.lat])
           },
           properties:{
             section_id:record.id,
@@ -6828,6 +6859,8 @@
       if(number){
         number.value = Number.isFinite(displayValue) ? displayValue.toFixed(2) : "";
         number.setAttribute("aria-label", `Custom stage in feet ${datumLabel()}`);
+        number.min = String(toDisplayDatum(-2));
+        number.max = String(toDisplayDatum(14));
       }
       setText("thresholdPill", `${Number.isFinite(displayValue) ? displayValue.toFixed(2) : "-"} ft ${datumLabel()}`);
       const thresholds = activeDatumThresholds();
@@ -6864,7 +6897,7 @@
 
     function setDatum(datum){
       const next = datum === "mllw" ? "mllw" : "navd88";
-      if(next === state.datum) return;
+      if(next === state.datum || !state.floodStats) return;
       state.datum = next;
       state.profileYZoom = null;
       updateThresholdControls();
@@ -6886,6 +6919,7 @@
         fetch(BOUNDARY_URL).then(r => r.json()),
         fetch(FLOOD_STATS_URL).then(r => r.json())
       ]);
+      configuredMllwOffset(floodStats); // Reject inconsistent municipal datum configuration.
       state.metadata = metadata;
       state.floodStats = floodStats;
       state.width = metadata.width;
@@ -6910,7 +6944,17 @@
       const raster = await image.readRasters({ interleave:true });
       state.raster = raster;
       setReady(true, "Ready");
-      defaultSection();
+    }
+
+    async function initializeProfiles(){
+      await Promise.all([loadApp(), loadRoadCenterlines()]);
+      const existingLine = currentLineLatLngs();
+      if(existingLine){
+        // A freehand or saved line can be opened while the DEM is downloading.
+        runProfile(existingLine);
+      }else if(!state.drawMode && !state.pendingPoints.length){
+        defaultSection();
+      }
     }
 
     $("drawBtn").addEventListener("click", () => {
@@ -7047,10 +7091,9 @@
       renderChart(state.profile);
     });
     loadSavedLines();
-    loadRoadCenterlines();
-    loadApp().catch(err => {
+    initializeProfiles().catch(err => {
       console.error(err);
-      setReady(false, "Unavailable");
+      setReady(false, "Road Risk data unavailable. Reload to retry.");
       setText("chartStatus", "DEM failed to load");
     });
   </script>
