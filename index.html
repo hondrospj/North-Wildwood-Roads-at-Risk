@@ -4302,7 +4302,7 @@
   </div>
 
   <div id="roadRiskHelp" class="rrHelpBackdrop" hidden aria-hidden="true">
-    <section class="rrHelpCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskHelpTitle">
+    <section class="rrHelpCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskHelpTitle" tabindex="-1">
       <header class="rrHelpHead">
         <h2 id="roadRiskHelpTitle">About this pane</h2>
         <button id="roadRiskHelpClose" class="rrDialogClose secondary" type="button" aria-label="Close explanation">×</button>
@@ -4316,7 +4316,7 @@
 
   <div id="roadRiskTour" class="rrTour" hidden aria-hidden="true">
     <div id="roadRiskTourSpotlight" class="rrTourSpotlight" aria-hidden="true"></div>
-    <section id="roadRiskTourCard" class="rrTourCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskTourTitle">
+    <section id="roadRiskTourCard" class="rrTourCard" role="dialog" aria-modal="true" aria-labelledby="roadRiskTourTitle" tabindex="-1">
       <header class="rrTourHead">
         <span id="roadRiskTourProgress" class="rrTourProgress">1 of 12</span>
         <button id="roadRiskTourClose" class="rrDialogClose secondary" type="button" aria-label="Close tutorial">×</button>
@@ -4869,13 +4869,53 @@
     let roadRiskTourIndex = 0;
     let roadRiskTourReturnFocus = null;
     let roadRiskTourPositionHandler = null;
+    let roadRiskModalInertState = null;
+
+    function activeRoadRiskDialog(){
+      for(const id of ["roadRiskTour", "roadRiskHelp"]){
+        const modal = $(id);
+        if(modal && !modal.hidden) return modal.querySelector('[role="dialog"]');
+      }
+      return null;
+    }
+
+    function roadRiskDialogTabStops(dialog){
+      return [...dialog.querySelectorAll('a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]')]
+        .filter(element => {
+          const style = getComputedStyle(element);
+          return !element.disabled && element.tabIndex >= 0 &&
+            !element.closest("[hidden], [inert]") && element.getClientRects().length > 0 &&
+            style.display !== "none" && style.visibility !== "hidden";
+        });
+    }
+
+    function syncRoadRiskModalBackground(){
+      if(activeRoadRiskDialog()){
+        if(!roadRiskModalInertState){
+          roadRiskModalInertState = [$("map"), $("shell")].filter(Boolean)
+            .map(element => ({element, inert:element.inert}));
+          roadRiskModalInertState.forEach(({element}) => { element.inert = true; });
+        }
+      }else if(roadRiskModalInertState){
+        roadRiskModalInertState.forEach(({element, inert}) => { element.inert = inert; });
+        roadRiskModalInertState = null;
+      }
+    }
+
+    function restoreRoadRiskDialogFocus(trigger){
+      const target = trigger?.isConnected ? trigger : $("roadRiskTourBtn");
+      const pane = target?.closest?.(".toolPane");
+      if(pane && desktopWorkspaceTabs()) setMobileToolActive(pane.id);
+      target?.focus?.();
+    }
 
     function closeRoadRiskHelp(){
       const modal = $("roadRiskHelp");
       if(!modal || modal.hidden) return;
       modal.hidden = true;
       modal.setAttribute("aria-hidden", "true");
-      roadRiskDialogReturnFocus?.focus?.();
+      syncRoadRiskModalBackground();
+      restoreRoadRiskDialogFocus(roadRiskDialogReturnFocus);
       roadRiskDialogReturnFocus = null;
     }
 
@@ -4883,12 +4923,14 @@
       const item = ROADRISK_PANE_HELP[key];
       const modal = $("roadRiskHelp");
       if(!item || !modal) return;
+      if(!$("roadRiskTour")?.hidden) setRoadRiskTourOpen(false);
       roadRiskHelpKey = key;
-      roadRiskDialogReturnFocus = trigger || document.activeElement;
+      if(modal.hidden) roadRiskDialogReturnFocus = trigger || document.activeElement;
       setText("roadRiskHelpTitle", item.title);
       $("roadRiskHelpBody").innerHTML = item.body;
       modal.hidden = false;
       modal.setAttribute("aria-hidden", "false");
+      syncRoadRiskModalBackground();
       $("roadRiskHelpClose")?.focus();
     }
 
@@ -4971,8 +5013,13 @@
       setText("roadRiskTourProgress", `${roadRiskTourIndex + 1} of ${ROADRISK_TOUR_STEPS.length}`);
       setText("roadRiskTourTitle", step.title);
       $("roadRiskTourBody").innerHTML = step.body;
-      $("roadRiskTourBack").disabled = roadRiskTourIndex === 0;
+      const back = $("roadRiskTourBack");
+      const backWasFocused = document.activeElement === back;
+      back.disabled = roadRiskTourIndex === 0;
       setText("roadRiskTourNext", roadRiskTourIndex === ROADRISK_TOUR_STEPS.length - 1 ? "Finish" : "Next");
+      if(back.disabled && backWasFocused){
+        $("roadRiskTourNext")?.focus();
+      }
 
       window.setTimeout(() => {
         const target = visibleRoadRiskTourTarget(step.target);
@@ -4989,26 +5036,30 @@
         closeRoadRiskHelp();
         const expandedPane = document.querySelector(".toolPane.isExpanded");
         if(expandedPane) togglePaneExpansion(expandedPane.id);
-        roadRiskTourReturnFocus = document.activeElement;
+        if(tutorial.hidden) roadRiskTourReturnFocus = document.activeElement;
         roadRiskTourIndex = clamp(Math.round(startIndex), 0, ROADRISK_TOUR_STEPS.length - 1);
         tutorial.hidden = false;
         tutorial.setAttribute("aria-hidden", "false");
         document.body.classList.add("rrTourActive");
-        roadRiskTourPositionHandler = () => positionRoadRiskTour();
-        window.addEventListener("resize", roadRiskTourPositionHandler);
-        document.addEventListener("scroll", roadRiskTourPositionHandler, true);
+        syncRoadRiskModalBackground();
+        if(!roadRiskTourPositionHandler){
+          roadRiskTourPositionHandler = () => positionRoadRiskTour();
+          window.addEventListener("resize", roadRiskTourPositionHandler);
+          document.addEventListener("scroll", roadRiskTourPositionHandler, true);
+        }
         renderRoadRiskTourStep();
         $("roadRiskTourNext")?.focus();
       }else{
         tutorial.hidden = true;
         tutorial.setAttribute("aria-hidden", "true");
         document.body.classList.remove("rrTourActive");
+        syncRoadRiskModalBackground();
         if(roadRiskTourPositionHandler){
           window.removeEventListener("resize", roadRiskTourPositionHandler);
           document.removeEventListener("scroll", roadRiskTourPositionHandler, true);
           roadRiskTourPositionHandler = null;
         }
-        roadRiskTourReturnFocus?.focus?.();
+        restoreRoadRiskDialogFocus(roadRiskTourReturnFocus);
         roadRiskTourReturnFocus = null;
       }
     }
@@ -5042,20 +5093,40 @@
         }
       });
       document.addEventListener("keydown", event => {
-        const helpOpen = !$("roadRiskHelp")?.hidden;
-        const tourOpen = !$("roadRiskTour")?.hidden;
-        if(!helpOpen && !tourOpen) return;
+        const dialog = activeRoadRiskDialog();
+        if(!dialog) return;
+        // Capture before Leaflet's focused-map handlers and application shortcuts.
+        // Native button/link activation and dialog scrolling still use defaults.
+        event.stopImmediatePropagation();
         if(event.key === "Escape"){
           event.preventDefault();
-          event.stopImmediatePropagation();
-          if(helpOpen) closeRoadRiskHelp();
-          if(tourOpen) setRoadRiskTourOpen(false);
+          if(!$("roadRiskTour")?.hidden) setRoadRiskTourOpen(false);
+          else closeRoadRiskHelp();
           return;
         }
-        if(!tourOpen) return;
-        if(event.key === "ArrowRight") $("roadRiskTourNext")?.click();
-        if(event.key === "ArrowLeft") $("roadRiskTourBack")?.click();
-      });
+        if(event.key === "Tab"){
+          event.preventDefault();
+          const stops = roadRiskDialogTabStops(dialog);
+          const index = stops.indexOf(document.activeElement);
+          const next = index < 0 ? (event.shiftKey ? stops.length - 1 : 0)
+            : (index + (event.shiftKey ? -1 : 1) + stops.length) % stops.length;
+          (stops[next] || dialog).focus();
+          return;
+        }
+        if(!dialog.contains(document.activeElement)){
+          event.preventDefault();
+          (roadRiskDialogTabStops(dialog)[0] || dialog).focus();
+          return;
+        }
+        if(!$("roadRiskTour")?.hidden && ["ArrowRight", "ArrowLeft"].includes(event.key)){
+          event.preventDefault();
+          $(event.key === "ArrowRight" ? "roadRiskTourNext" : "roadRiskTourBack")?.click();
+        }
+      }, true);
+      document.addEventListener("focusin", event => {
+        const dialog = activeRoadRiskDialog();
+        if(dialog && !dialog.contains(event.target)) (roadRiskDialogTabStops(dialog)[0] || dialog).focus();
+      }, true);
     }
 
     function niceScaleFeet(maxFeet){
@@ -6712,9 +6783,17 @@
       renderSavedLines();
     }
 
-    function persistSavedLines(){
-      localStorage.setItem(SAVED_LINES_KEY, JSON.stringify(state.savedLines));
+    function persistSavedLines(nextLines, nextActiveId=state.activeSavedLineId){
+      try{
+        localStorage.setItem(SAVED_LINES_KEY, JSON.stringify(nextLines));
+      }catch(err){
+        console.warn("Saved line write failed", err);
+        return false;
+      }
+      state.savedLines = nextLines;
+      state.activeSavedLineId = nextActiveId;
       renderSavedLines();
+      return true;
     }
 
     function renderSavedLineLayers(){
@@ -6795,7 +6874,7 @@
       const a = pts[0];
       const b = pts[pts.length - 1];
       const id = `line-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-      state.savedLines.unshift({
+      const line = {
         id,
         name,
         thresholdFt:state.thresholdFt,
@@ -6806,11 +6885,12 @@
         roadSnapped:state.activeRoadSnapped,
         vertexDistances:state.activeVertexDistances.slice(),
         createdAt:new Date().toISOString()
-      });
-      state.savedLines = state.savedLines.slice(0, 12);
-      state.activeSavedLineId = id;
+      };
+      if(!persistSavedLines([line, ...state.savedLines], id)){
+        setExportStatus("Could not save this line. Browser storage is full or unavailable; existing saved lines are unchanged. Export your profiles to keep a copy, then free storage or enable it and retry.");
+        return;
+      }
       if(input) input.value = "";
-      persistSavedLines();
       setExportStatus(`Saved "${name}". Draw and save another line to keep both on the map.`);
     }
 
@@ -6830,9 +6910,16 @@
 
     function deleteSavedLine(id){
       const line = state.savedLines.find(item => item.id === id);
-      state.savedLines = state.savedLines.filter(item => item.id !== id);
-      if(state.activeSavedLineId === id) state.activeSavedLineId = null;
-      persistSavedLines();
+      if(!line){
+        setExportStatus("Saved line already removed.");
+        return;
+      }
+      const nextLines = state.savedLines.filter(item => item.id !== id);
+      const nextActiveId = state.activeSavedLineId === id ? null : state.activeSavedLineId;
+      if(!persistSavedLines(nextLines, nextActiveId)){
+        setExportStatus("Could not delete this saved line because browser storage could not be updated. Saved lines are unchanged; enable browser storage and retry.");
+        return;
+      }
       setExportStatus(line ? `Deleted "${line.name || "saved line"}".` : "Saved line deleted.");
     }
 

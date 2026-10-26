@@ -6,3 +6,5 @@
 *_source.tif
 *_source.vrt
 *_tile_*.tif
+__pycache__/
+*.py[cod]
