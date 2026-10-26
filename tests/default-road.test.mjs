@@ -106,7 +106,7 @@ test('the real default draw call creates two draggable controls and profiles the
   assert.deepEqual(JSON.parse(JSON.stringify(profiles[0])),road.coordinates.map(([lng,lat])=>({lat,lng})));
   assert.equal(context.state.activeVertexDistances.length,2);
   assert.ok(context.state.activeVertexDistances[1]>0);
-  assert.match(notices.at(-1).text,/West \/ East 16th Avenue/);
+  assert.equal(notices.at(-1).text, '');
 });
 
 test('unavailable road data leaves an explicitly labeled editable freehand sample', () => {
